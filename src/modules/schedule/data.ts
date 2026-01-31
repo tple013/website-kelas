@@ -1,13 +1,13 @@
 import type { ScheduleItem } from "./types";
 
 export const schedules: ScheduleItem[] = [
-  { id: "1", day: "Senin", time: "08:00 - 09:40", subject: "Algoritma & Pemrograman 1", location: "Ruang V.301", instructor: "Budi Santoso, M.Kom" },
-  { id: "2", day: "Senin", time: "10:00 - 11:40", subject: "Pendidikan Kewarganegaraan", location: "Ruang V.302", instructor: "Dra. Siti Aminah, M.Pd" },
-  { id: "3", day: "Selasa", time: "13:00 - 14:40", subject: "Kalkulus 1", location: "Ruang V.405", instructor: "Dr. Rina Wati, M.Si" },
-  { id: "4", day: "Selasa", time: "15:00 - 16:40", subject: "Fisika Dasar", location: "Ruang V.405", instructor: "Prof. Hendra Gunawan" },
-  { id: "5", day: "Rabu", time: "08:00 - 10:00", subject: "Praktikum Algoritma", location: "Lab Komputer 1", instructor: "Asisten Lab" },
-  { id: "6", day: "Kamis", time: "09:00 - 10:40", subject: "Bahasa Inggris 1", location: "Ruang V.202", instructor: "Sarah Jenkins, M.Ed" },
-  { id: "7", day: "Kamis", time: "13:00 - 14:40", subject: "Pengantar Teknologi Informasi", location: "Ruang V.305", instructor: "Dr. Asep Saefullah" },
-  { id: "8", day: "Jumat", time: "08:00 - 11:00", subject: "Arsitektur Komputer", location: "Ruang V.501", instructor: "Ir. Joko Anwar, M.T" },
-  { id: "9", day: "Sabtu", time: "08:00 - 12:00", subject: "Workshop Web Development", location: "Lab Komputer 3", instructor: "Tim Developer" },
+  { id: "1", day: "Senin", time: "08:00 - 09:40", subject: "Lorem Ipsum Dolor", location: "Ruang A.101", instructor: "Dr. Lorem Ipsum, M.Sc" },
+  { id: "2", day: "Senin", time: "10:00 - 11:40", subject: "Sit Amet Consectetur", location: "Ruang A.102", instructor: "Prof. Adipiscing Elit" },
+  { id: "3", day: "Selasa", time: "13:00 - 14:40", subject: "Sed Do Eiusmod", location: "Ruang B.201", instructor: "Tempor Incididunt, M.Pd" },
+  { id: "4", day: "Selasa", time: "15:00 - 16:40", subject: "Ut Labore Dolore", location: "Ruang B.202", instructor: "Magna Aliqua, Ph.D" },
+  { id: "5", day: "Rabu", time: "08:00 - 10:00", subject: "Praktikum Enim Minim", location: "Lab Lorem 1", instructor: "Asisten Veniam" },
+  { id: "6", day: "Kamis", time: "09:00 - 10:40", subject: "Quis Nostrud Exercitation", location: "Ruang C.301", instructor: "Ullamco Laboris, M.Ed" },
+  { id: "7", day: "Kamis", time: "13:00 - 14:40", subject: "Nisi Ut Aliquip", location: "Ruang C.302", instructor: "Dr. Ex Ea Commodo" },
+  { id: "8", day: "Jumat", time: "08:00 - 11:00", subject: "Duis Aute Irure", location: "Ruang D.401", instructor: "Ir. Dolor Reprehenderit" },
+  { id: "9", day: "Sabtu", time: "08:00 - 12:00", subject: "Workshop Voluptate Velit", location: "Lab Lorem 2", instructor: "Tim Cillum Dolore" },
 ];
