@@ -177,3 +177,46 @@ export const schedulesService = {
     if (error) throw error;
   },
 };
+
+// =====================================================
+// STORAGE SERVICE
+// =====================================================
+export const storageService = {
+  async uploadAvatar(file: File, fileName: string): Promise<string> {
+    const fileExt = file.name.split('.').pop();
+    const fileNameWithExt = `${fileName}.${fileExt}`;
+    const filePath = `avatars/${fileNameWithExt}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from('avatars')
+      .upload(filePath, file, {
+        cacheControl: '3600',
+        upsert: false
+      });
+
+    if (uploadError) {
+      throw uploadError;
+    }
+
+    const { data } = supabase.storage
+      .from('avatars')
+      .getPublicUrl(filePath);
+
+    return data.publicUrl;
+  },
+
+  async deleteAvatar(url: string): Promise<void> {
+    // Extract file path from public URL
+    const urlParts = url.split('/');
+    const fileName = urlParts[urlParts.length - 1];
+    const filePath = `avatars/${fileName}`;
+
+    const { error } = await supabase.storage
+      .from('avatars')
+      .remove([filePath]);
+
+    if (error) {
+      console.warn('Failed to delete avatar:', error);
+    }
+  },
+};

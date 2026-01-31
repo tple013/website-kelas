@@ -62,6 +62,11 @@ Website dapat diakses di: [https://tple013.github.io/website-kelas](https://tple
 3. **Setup Supabase**
    - Buat project baru di [Supabase](https://supabase.com/)
    - Jalankan SQL dari `supabase-setup.sql` di SQL Editor
+   - **Setup Storage**:
+     - Pergi ke Storage di sidebar
+     - Buat bucket baru bernama `avatars`
+     - Set bucket menjadi **Public** (uncheck "Private")
+     - Set policy: Allow all operations for authenticated users
    - Buat user admin di Authentication > Users
 
 4. **Konfigurasi environment**
@@ -192,6 +197,7 @@ WHERE email = 'user@example.com';
 
 ### Fitur Admin
 - ✅ **CRUD Anggota** - Tambah, edit, hapus anggota
+- ✅ **Upload Foto** - Upload foto langsung atau URL (tersimpan di Supabase Storage)
 - ✅ **CRUD Proyek** - Kelola proyek kelas (hanya admin)
 - ✅ **CRUD Jadwal** - Atur jadwal kuliah (hanya admin)
 - ✅ **User Management** - Kelola role user (hanya admin)

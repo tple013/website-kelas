@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useMembersSupabase } from "@/lib/hooks";
+import { storageService } from "@/lib/services";
 import type { DbMember } from "@/lib/types";
 
 export function MembersAdmin() {
@@ -17,6 +18,8 @@ export function MembersAdmin() {
     instagram: "",
     linkedin: "",
   });
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [photoPreview, setPhotoPreview] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const resetForm = () => {
@@ -29,6 +32,8 @@ export function MembersAdmin() {
       instagram: "",
       linkedin: "",
     });
+    setSelectedFile(null);
+    setPhotoPreview("");
     setEditingMember(null);
     setIsFormOpen(false);
   };
@@ -44,7 +49,21 @@ export function MembersAdmin() {
       instagram: member.instagram || "",
       linkedin: member.linkedin || "",
     });
+    setPhotoPreview(member.photo || "");
+    setSelectedFile(null);
     setIsFormOpen(true);
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedFile(file);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setPhotoPreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -52,10 +71,23 @@ export function MembersAdmin() {
     setIsSubmitting(true);
 
     try {
+      let photoUrl = formData.photo;
+
+      // Upload file jika ada file baru dipilih
+      if (selectedFile) {
+        const fileName = `${Date.now()}-${selectedFile.name.replace(/[^a-zA-Z0-9.-]/g, '')}`;
+        photoUrl = await storageService.uploadAvatar(selectedFile, fileName);
+      }
+
+      const memberData = {
+        ...formData,
+        photo: photoUrl,
+      };
+
       if (editingMember) {
-        await updateMember(editingMember.id, formData);
+        await updateMember(editingMember.id, memberData);
       } else {
-        await addMember(formData);
+        await addMember(memberData);
       }
       resetForm();
     } catch (err) {
@@ -69,6 +101,12 @@ export function MembersAdmin() {
     if (!confirm(`Yakin ingin menghapus "${name}"?`)) return;
     
     try {
+      // Cari member untuk dapatkan URL foto
+      const member = members.find(m => m.id === id);
+      if (member?.photo) {
+        await storageService.deleteAvatar(member.photo);
+      }
+      
       await deleteMember(id);
     } catch (err) {
       alert("Gagal menghapus: " + (err instanceof Error ? err.message : "Unknown error"));
@@ -133,14 +171,42 @@ export function MembersAdmin() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">URL Foto</label>
-                <input
-                  type="text"
-                  value={formData.photo}
-                  onChange={(e) => setFormData({ ...formData, photo: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="https://... atau /avatars/nama.jpg"
-                />
+                <label className="block text-sm font-medium text-slate-700 mb-1">Foto</label>
+                <div className="space-y-3">
+                  {/* Preview */}
+                  {photoPreview && (
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={photoPreview}
+                        alt="Preview"
+                        className="w-16 h-16 rounded-full object-cover border"
+                      />
+                      <div className="text-sm text-slate-600">
+                        {selectedFile ? selectedFile.name : "Foto saat ini"}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* File Input */}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileSelect}
+                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                  />
+
+                  {/* URL Input (fallback) */}
+                  <div className="text-xs text-slate-500">
+                    Atau masukkan URL foto langsung:
+                    <input
+                      type="text"
+                      value={formData.photo}
+                      onChange={(e) => setFormData({ ...formData, photo: e.target.value })}
+                      className="w-full mt-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                      placeholder="https://..."
+                    />
+                  </div>
+                </div>
               </div>
 
               <div>
