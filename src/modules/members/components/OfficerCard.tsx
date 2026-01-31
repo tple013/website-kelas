@@ -1,6 +1,10 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import { Card, CardBody, CardFooter } from "@/shared/components/ui/Card";
 import { Badge } from "@/shared/components/ui/Badge";
+import { getAssetPath, getAvatarFallback } from "@/lib/utils";
 import type { Member } from "../types";
 
 interface OfficerCardProps {
@@ -8,22 +12,26 @@ interface OfficerCardProps {
 }
 
 export function OfficerCard({ officer }: OfficerCardProps) {
+  const [imgError, setImgError] = useState(false);
+  
+  const photoSrc = imgError || !officer.photo 
+    ? getAvatarFallback(officer.name)
+    : getAssetPath(officer.photo);
+
   return (
     <Card className="border-t-4 border-blue-600 flex flex-col h-full group">
       <CardBody className="text-center flex-grow p-8">
         {/* Avatar dengan Foto */}
         <div className="w-24 h-24 rounded-full mx-auto mb-6 overflow-hidden border-4 border-white shadow-lg group-hover:scale-105 transition-transform duration-300 bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center">
-          {officer.photo ? (
-            <Image
-              src={officer.photo}
-              alt={officer.name}
-              width={96}
-              height={96}
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <i className="bi bi-person-fill text-4xl text-slate-400"></i>
-          )}
+          <Image
+            src={photoSrc}
+            alt={officer.name}
+            width={96}
+            height={96}
+            className="w-full h-full object-cover"
+            onError={() => setImgError(true)}
+            unoptimized
+          />
         </div>
         <h3 className="text-xl font-bold text-slate-900 mb-1">{officer.name}</h3>
         <Badge variant="info" className="mb-4">{officer.role}</Badge>

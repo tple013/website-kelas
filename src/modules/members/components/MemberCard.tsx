@@ -1,5 +1,9 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import { Card, CardBody, CardFooter } from "@/shared/components/ui/Card";
+import { getAssetPath, getAvatarFallback } from "@/lib/utils";
 import type { Member } from "../types";
 
 interface MemberCardProps {
@@ -7,22 +11,26 @@ interface MemberCardProps {
 }
 
 export function MemberCard({ member }: MemberCardProps) {
+  const [imgError, setImgError] = useState(false);
+  
+  const photoSrc = imgError || !member.photo 
+    ? getAvatarFallback(member.name)
+    : getAssetPath(member.photo);
+
   return (
     <Card className="flex flex-col h-full transform hover:-translate-y-1">
       <CardBody className="text-center flex-grow p-6">
         {/* Avatar dengan Foto */}
         <div className="w-16 h-16 rounded-full mx-auto mb-4 overflow-hidden bg-slate-100 flex items-center justify-center">
-          {member.photo ? (
-            <Image
-              src={member.photo}
-              alt={member.name}
-              width={64}
-              height={64}
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <i className="bi bi-person text-2xl text-slate-400"></i>
-          )}
+          <Image
+            src={photoSrc}
+            alt={member.name}
+            width={64}
+            height={64}
+            className="w-full h-full object-cover"
+            onError={() => setImgError(true)}
+            unoptimized
+          />
         </div>
         <h3 className="text-sm font-semibold text-slate-800 line-clamp-2 min-h-[40px]">{member.name}</h3>
         {member.description && (
