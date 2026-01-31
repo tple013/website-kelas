@@ -1,5 +1,5 @@
 import { Card } from "@/shared/components/ui/Card";
-import type { ScheduleItem } from "../types";
+import type { ScheduleItem } from "@/lib/types";
 
 interface DayCardProps {
   day: string;

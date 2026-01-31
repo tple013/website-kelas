@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { Card, CardBody, CardFooter } from "@/shared/components/ui/Card";
 import { getAssetPath, getAvatarFallback } from "@/lib/utils";
-import type { Member } from "../types";
+import type { Member } from "@/lib/types";
 
 interface MemberCardProps {
   member: Member;

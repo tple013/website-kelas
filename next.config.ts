@@ -1,9 +1,10 @@
 import type { NextConfig } from "next";
 
+const isProd = process.env.NODE_ENV === "production";
+
 const nextConfig: NextConfig = {
-  output: "export",
+  // Image optimization
   images: {
-    unoptimized: true,
     remotePatterns: [
       {
         protocol: "https",
@@ -11,9 +12,15 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  // Ganti 'website-kelas' dengan nama repository GitHub kamu
-  basePath: process.env.NODE_ENV === "production" ? "/website-kelas" : "",
-  assetPrefix: process.env.NODE_ENV === "production" ? "/website-kelas" : "",
+  
+  // Performance optimizations
+  poweredByHeader: false,
+  reactStrictMode: true,
+  
+  // Compiler optimizations
+  compiler: {
+    removeConsole: isProd ? { exclude: ["error", "warn"] } : false,
+  },
 };
 
 export default nextConfig;

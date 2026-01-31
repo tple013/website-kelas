@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Card, CardBody, CardFooter } from "@/shared/components/ui/Card";
 import { Badge } from "@/shared/components/ui/Badge";
 import { getAssetPath, getAvatarFallback } from "@/lib/utils";
-import type { Member } from "../types";
+import type { Member } from "@/lib/types";
 
 interface OfficerCardProps {
   officer: Member;

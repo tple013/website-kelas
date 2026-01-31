@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import type { Project } from "../types";
-import { projects as projectsData } from "../data";
+import { projectsService } from "@/lib/services";
+import { mapDbToProject, type Project } from "@/lib/types";
 
 export function useProjects() {
   const [data, setData] = useState<Project[] | null>(null);
@@ -10,12 +10,19 @@ export function useProjects() {
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setData(projectsData);
-      setLoading(false);
-    }, 100);
+    async function fetchProjects() {
+      try {
+        setLoading(true);
+        const projects = await projectsService.getAll();
+        setData(projects.map(mapDbToProject));
+      } catch (err) {
+        setError(err instanceof Error ? err : new Error("Gagal memuat proyek"));
+      } finally {
+        setLoading(false);
+      }
+    }
 
-    return () => clearTimeout(timer);
+    fetchProjects();
   }, []);
 
   return { data, loading, error };

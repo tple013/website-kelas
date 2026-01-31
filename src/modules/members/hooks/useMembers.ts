@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import type { Member } from "../types";
-import { members as membersData } from "../data";
+import { membersService } from "@/lib/services";
+import { mapDbToMember, type Member } from "@/lib/types";
 
 export function useMembers() {
   const [data, setData] = useState<Member[] | null>(null);
@@ -10,13 +10,19 @@ export function useMembers() {
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    // Simulasi loading untuk UX yang lebih baik
-    const timer = setTimeout(() => {
-      setData(membersData);
-      setLoading(false);
-    }, 100);
+    async function fetchMembers() {
+      try {
+        setLoading(true);
+        const members = await membersService.getAll();
+        setData(members.map(mapDbToMember));
+      } catch (err) {
+        setError(err instanceof Error ? err : new Error("Gagal memuat anggota"));
+      } finally {
+        setLoading(false);
+      }
+    }
 
-    return () => clearTimeout(timer);
+    fetchMembers();
   }, []);
 
   return { data, loading, error };

@@ -54,7 +54,7 @@ export function VisionMission() {
             <div className="text-6xl mb-6 inline-block filter drop-shadow-lg">🚀</div>
             <h3 className="text-2xl font-bold mb-4 tracking-wide">Komitmen Kami</h3>
             <p className="text-blue-100 leading-relaxed mb-8">
-              "Bersama-sama kami berkomitmen untuk terus belajar, berinovasi, dan berkontribusi dalam membangun solusi teknologi yang berdampak positif."
+              &ldquo;Bersama-sama kami berkomitmen untuk terus belajar, berinovasi, dan berkontribusi dalam membangun solusi teknologi yang berdampak positif.&rdquo;
             </p>
             <div className="grid grid-cols-2 gap-4 border-t border-blue-800 pt-8">
               <div>

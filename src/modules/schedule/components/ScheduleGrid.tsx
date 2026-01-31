@@ -1,7 +1,7 @@
 "use client";
 
 import { DayCard } from "./DayCard";
-import type { ScheduleItem } from "../types";
+import type { ScheduleItem } from "@/lib/types";
 
 const dayOrder = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
 

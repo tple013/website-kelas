@@ -1,18 +1,11 @@
-// Get base path for assets (handles GitHub Pages deployment)
-export function getBasePath(): string {
-  return process.env.NODE_ENV === "production" ? "/website-kelas" : "";
-}
-
-// Get full asset path with basePath
+// Get full asset path (simplified for Vercel)
 export function getAssetPath(path: string): string {
-  const basePath = getBasePath();
   // If path already starts with http/https, return as is
   if (path.startsWith("http://") || path.startsWith("https://")) {
     return path;
   }
   // Ensure path starts with /
-  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
-  return `${basePath}${normalizedPath}`;
+  return path.startsWith("/") ? path : `/${path}`;
 }
 
 // Generate UI Avatars URL as fallback

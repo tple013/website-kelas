@@ -1,6 +1,6 @@
 import { Card, CardBody, CardFooter } from "@/shared/components/ui/Card";
 import { Badge } from "@/shared/components/ui/Badge";
-import type { Project } from "../types";
+import type { Project } from "@/lib/types";
 
 const statusConfig = {
   completed: { variant: "success" as const, label: "Selesai", icon: "bi-check-circle-fill" },
