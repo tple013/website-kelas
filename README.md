@@ -169,18 +169,35 @@ website-kelas/
 1. Klik tombol **Admin** di navbar
 2. Login dengan email dan password yang sudah dibuat di Supabase
 
-### Fitur Admin
-- ✅ **CRUD Anggota** - Tambah, edit, hapus anggota
-- ✅ **CRUD Proyek** - Kelola proyek kelas
-- ✅ **CRUD Jadwal** - Atur jadwal kuliah
-- ✅ **Protected Routes** - Hanya user terautentikasi
-- ✅ **Row Level Security** - Data aman di Supabase
+### Role-Based Access Control
+Website ini menggunakan sistem role untuk mengatur akses admin panel:
+
+- **Pengurus Kelas (admin)**: Akses penuh ke semua fitur
+  - CRUD Anggota
+  - CRUD Proyek  
+  - CRUD Jadwal
+- **Anggota (member)**: Akses terbatas
+  - CRUD Anggota saja
 
 ### Membuat User Admin
 ```sql
 -- Di Supabase Dashboard > Authentication > Users
 -- Klik "Add User" dan isi email + password
+
+-- Setelah user dibuat, update user_metadata untuk set role:
+UPDATE auth.users 
+SET raw_user_meta_data = '{"role": "admin"}'  -- atau "member"
+WHERE email = 'user@example.com';
 ```
+
+### Fitur Admin
+- ✅ **CRUD Anggota** - Tambah, edit, hapus anggota
+- ✅ **CRUD Proyek** - Kelola proyek kelas (hanya admin)
+- ✅ **CRUD Jadwal** - Atur jadwal kuliah (hanya admin)
+- ✅ **User Management** - Kelola role user (hanya admin)
+- ✅ **Protected Routes** - Hanya user terautentikasi
+- ✅ **Role-Based Access** - Akses berdasarkan role user
+- ✅ **Row Level Security** - Data aman di Supabase
 
 ---
 

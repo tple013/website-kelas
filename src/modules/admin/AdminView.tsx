@@ -3,19 +3,23 @@
 import { useState } from "react";
 import { useAuth } from "@/lib/auth";
 import { ProtectedRoute } from "@/shared/components/auth";
-import { MembersAdmin, ProjectsAdmin, SchedulesAdmin } from "./components";
+import { MembersAdmin, ProjectsAdmin, SchedulesAdmin, UsersAdmin } from "./components";
 
-type Tab = "members" | "projects" | "schedules";
+type Tab = "members" | "projects" | "schedules" | "users";
 
 function AdminContent() {
   const [activeTab, setActiveTab] = useState<Tab>("members");
-  const { user, signOut } = useAuth();
+  const { user, role, signOut } = useAuth();
 
-  const tabs = [
+  const allTabs = [
     { id: "members" as Tab, label: "Anggota", icon: "bi-people" },
     { id: "projects" as Tab, label: "Proyek", icon: "bi-kanban" },
     { id: "schedules" as Tab, label: "Jadwal", icon: "bi-calendar3" },
+    { id: "users" as Tab, label: "Users", icon: "bi-person-gear" },
   ];
+
+  // Filter tabs berdasarkan role
+  const tabs = role === 'admin' ? allTabs : allTabs.filter(tab => tab.id === 'members');
 
   const handleLogout = async () => {
     if (confirm("Yakin ingin keluar?")) {
@@ -39,7 +43,7 @@ function AdminContent() {
             <div className="flex items-center gap-4">
               <div className="text-right">
                 <p className="text-sm font-medium text-slate-900">{user?.email}</p>
-                <p className="text-xs text-slate-500">Administrator</p>
+                <p className="text-xs text-slate-500">{role === 'admin' ? 'Pengurus Kelas' : 'Anggota'}</p>
               </div>
               <button
                 onClick={handleLogout}
@@ -80,6 +84,7 @@ function AdminContent() {
         {activeTab === "members" && <MembersAdmin />}
         {activeTab === "projects" && <ProjectsAdmin />}
         {activeTab === "schedules" && <SchedulesAdmin />}
+        {activeTab === "users" && <UsersAdmin />}
       </div>
     </div>
   );

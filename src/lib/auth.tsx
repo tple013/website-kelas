@@ -8,8 +8,10 @@ interface AuthContextType {
   user: User | null;
   session: Session | null;
   isLoading: boolean;
+  role: 'admin' | 'member' | null;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
+  updateRole: (role: 'admin' | 'member') => Promise<{ error: Error | null }>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -18,12 +20,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [role, setRole] = useState<'admin' | 'member' | null>(null);
 
   useEffect(() => {
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
+      setRole(session?.user?.user_metadata?.role as 'admin' | 'member' | null ?? null);
       setIsLoading(false);
     });
 
@@ -32,6 +36,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       (_event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
+        setRole(session?.user?.user_metadata?.role as 'admin' | 'member' | null ?? null);
         setIsLoading(false);
       }
     );
@@ -51,8 +56,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await supabase.auth.signOut();
   };
 
+  const updateRole = async (newRole: 'admin' | 'member') => {
+    if (!user) return { error: new Error('No user logged in') };
+    
+    const { error } = await supabase.auth.updateUser({
+      data: { role: newRole }
+    });
+    
+    if (!error) {
+      setRole(newRole);
+    }
+    
+    return { error };
+  };
+
   return (
-    <AuthContext.Provider value={{ user, session, isLoading, signIn, signOut }}>
+    <AuthContext.Provider value={{ user, session, isLoading, role, signIn, signOut, updateRole }}>
       {children}
     </AuthContext.Provider>
   );
