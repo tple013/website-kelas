@@ -51,19 +51,19 @@ export function VisionMission() {
         <div className="relative">
           <div className="absolute inset-0 bg-blue-600 blur-2xl opacity-20 transform rotate-3 rounded-3xl"></div>
           <div className="relative bg-gradient-to-br from-blue-900 to-slate-900 rounded-3xl p-10 text-center shadow-xl text-white">
-            <div className="text-6xl mb-6 inline-block filter drop-shadow-lg">🇮🇩</div>
-            <h3 className="text-2xl font-bold mb-4 tracking-wide">Bangga Indonesia</h3>
+            <div className="text-6xl mb-6 inline-block filter drop-shadow-lg">🚀</div>
+            <h3 className="text-2xl font-bold mb-4 tracking-wide">Komitmen Kami</h3>
             <p className="text-blue-100 leading-relaxed mb-8">
-              "Kami percaya bahwa anak muda Indonesia memiliki potensi luar biasa untuk menjadi pemain kunci dalam revolusi teknologi global. Ini adalah langkah awal kami."
+              "Bersama-sama kami berkomitmen untuk terus belajar, berinovasi, dan berkontribusi dalam membangun solusi teknologi yang berdampak positif."
             </p>
             <div className="grid grid-cols-2 gap-4 border-t border-blue-800 pt-8">
               <div>
-                <div className="text-3xl font-bold text-sky-400">100%</div>
-                <div className="text-sm text-blue-300">Dedikasi</div>
+                <div className="text-3xl font-bold text-sky-400">28</div>
+                <div className="text-sm text-blue-300">Anggota Aktif</div>
               </div>
               <div>
                 <div className="text-3xl font-bold text-sky-400">∞</div>
-                <div className="text-sm text-blue-300">Inovasi</div>
+                <div className="text-sm text-blue-300">Semangat Belajar</div>
               </div>
             </div>
           </div>
