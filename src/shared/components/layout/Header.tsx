@@ -15,17 +15,17 @@ export default function Header() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-blue-800/95 backdrop-blur-md border-b border-blue-700 shadow-sm">
+    <header className="sticky top-0 z-50 bg-grey-800/95 backdrop-blur-md border-b border-blue-700 shadow-sm">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           
           {/* LOGO */}
           <div className="flex items-center gap-3 group cursor-pointer">
-            <div className="bg-white/10 p-2 rounded-lg group-hover:bg-white/20 transition-all duration-300">
+            <div className="bg-blue-600 p-2 rounded-lg group-hover:bg-black transition-all duration-300">
               <i className="bi bi-code-slash text-white text-xl"></i>
             </div>
-            <Link href="/" className="text-xl font-bold text-white tracking-wider hover:text-blue-100 transition-colors">
-              TPLE<span className="text-sky-300">013</span>
+            <Link href="/" className="text-xl font-bold text-blue tracking-wider hover: text-stone-700 transition-colors">
+              TPLE<span className="text-blue-500">013</span>
             </Link>
           </div>
 
