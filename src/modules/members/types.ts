@@ -5,4 +5,6 @@ export interface Member {
   description: string;
   role?: string;
   isOfficer?: boolean;
+  instagram?: string;
+  linkedin?: string;
 }

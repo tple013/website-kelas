@@ -1,12 +1,10 @@
 "use client";
 
 import { useSchedule } from "./hooks/useSchedule";
-import { DayCard } from "./components/DayCard";
+import { ScheduleGrid } from "./components/ScheduleGrid";
 import { SkeletonCard } from "@/shared/components/ui/Skeleton";
 import { ErrorAlert } from "@/shared/components/ui/ErrorAlert";
 import { Badge } from "@/shared/components/ui/Badge";
-
-const dayOrder = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
 
 export function ScheduleView() {
   const { data: schedules, loading, error } = useSchedule();
@@ -34,15 +32,6 @@ export function ScheduleView() {
     );
   }
 
-  // Group by day
-  const schedulesByDay = schedules?.reduce((acc, item) => {
-    if (!acc[item.day]) acc[item.day] = [];
-    acc[item.day].push(item);
-    return acc;
-  }, {} as Record<string, typeof schedules>) || {};
-
-  const sortedDays = Object.keys(schedulesByDay).sort((a, b) => dayOrder.indexOf(a) - dayOrder.indexOf(b));
-
   return (
     <div className="bg-slate-50 min-h-screen pb-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
@@ -56,21 +45,7 @@ export function ScheduleView() {
         </div>
 
         {/* Grid */}
-        {sortedDays.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {sortedDays.map((day) => (
-              <DayCard key={day} day={day} items={schedulesByDay[day]} />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-24 bg-white rounded-3xl border-2 border-dashed border-slate-200">
-            <div className="bg-slate-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
-              <i className="bi bi-calendar-x text-4xl text-slate-300"></i>
-            </div>
-            <h3 className="text-lg font-semibold text-slate-900">Belum ada jadwal</h3>
-            <p className="text-slate-500 mt-2">Jadwal perkuliahan belum tersedia saat ini.</p>
-          </div>
-        )}
+        <ScheduleGrid data={schedules} />
       </div>
     </div>
   );

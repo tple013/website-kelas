@@ -32,12 +32,19 @@ export function OfficerCard({ officer }: OfficerCardProps) {
         </p>
       </CardBody>
       <CardFooter className="flex justify-center space-x-4 py-3">
-        <a href="#" className="text-slate-400 hover:text-blue-600 transition-colors transform hover:scale-110">
-          <i className="bi bi-instagram text-lg"></i>
-        </a>
-        <a href="#" className="text-slate-400 hover:text-blue-800 transition-colors transform hover:scale-110">
-          <i className="bi bi-linkedin text-lg"></i>
-        </a>
+        {officer.instagram && (
+          <a href={officer.instagram} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-blue-600 transition-colors transform hover:scale-110">
+            <i className="bi bi-instagram text-lg"></i>
+          </a>
+        )}
+        {officer.linkedin && (
+          <a href={officer.linkedin} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-blue-800 transition-colors transform hover:scale-110">
+            <i className="bi bi-linkedin text-lg"></i>
+          </a>
+        )}
+        {!officer.instagram && !officer.linkedin && (
+          <span className="text-slate-300 text-xs">No social links</span>
+        )}
       </CardFooter>
     </Card>
   );
