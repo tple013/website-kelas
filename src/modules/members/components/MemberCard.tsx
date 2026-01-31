@@ -1,0 +1,38 @@
+import Image from "next/image";
+import { Card, CardBody, CardFooter } from "@/shared/components/ui/Card";
+import type { Member } from "../types";
+
+interface MemberCardProps {
+  member: Member;
+}
+
+export function MemberCard({ member }: MemberCardProps) {
+  return (
+    <Card className="flex flex-col h-full transform hover:-translate-y-1">
+      <CardBody className="text-center flex-grow p-6">
+        {/* Avatar dengan Foto */}
+        <div className="w-16 h-16 rounded-full mx-auto mb-4 overflow-hidden bg-slate-100 flex items-center justify-center">
+          {member.photo ? (
+            <Image
+              src={member.photo}
+              alt={member.name}
+              width={64}
+              height={64}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <i className="bi bi-person text-2xl text-slate-400"></i>
+          )}
+        </div>
+        <h3 className="text-sm font-semibold text-slate-800 line-clamp-2 min-h-[40px]">{member.name}</h3>
+        {member.description && (
+          <p className="text-xs text-slate-500 mt-2 line-clamp-2">{member.description}</p>
+        )}
+      </CardBody>
+      <CardFooter className="flex justify-center space-x-3 py-2">
+        <a href="#" className="text-slate-400 hover:text-pink-600 transition-colors"><i className="bi bi-instagram"></i></a>
+        <a href="#" className="text-slate-400 hover:text-blue-700 transition-colors"><i className="bi bi-linkedin"></i></a>
+      </CardFooter>
+    </Card>
+  );
+}
