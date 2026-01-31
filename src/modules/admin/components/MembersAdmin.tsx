@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { useMembersSupabase } from "@/lib/hooks";
 import { storageService } from "@/lib/services";
 import type { DbMember } from "@/lib/types";
@@ -176,9 +177,11 @@ export function MembersAdmin() {
                   {/* Preview */}
                   {photoPreview && (
                     <div className="flex items-center gap-3">
-                      <img
+                      <Image
                         src={photoPreview}
                         alt="Preview"
+                        width={64}
+                        height={64}
                         className="w-16 h-16 rounded-full object-cover border"
                       />
                       <div className="text-sm text-slate-600">
