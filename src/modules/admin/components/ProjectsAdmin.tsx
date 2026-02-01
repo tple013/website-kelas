@@ -15,6 +15,7 @@ interface FormData {
   end_date: string;
   team_members: string;
   technologies: string;
+  features: string;
   link: string;
 }
 
@@ -27,6 +28,7 @@ const initialFormData: FormData = {
   end_date: "",
   team_members: "",
   technologies: "",
+  features: "",
   link: "",
 };
 
@@ -56,6 +58,7 @@ export function ProjectsAdmin() {
       end_date: project.end_date || "",
       team_members: project.team_members?.join(", ") || "",
       technologies: project.technologies?.join(", ") || "",
+      features: project.features?.join(", ") || "",
       link: project.link || "",
     });
     setIsFormOpen(true);
@@ -74,6 +77,7 @@ export function ProjectsAdmin() {
       end_date: formData.end_date || undefined,
       team_members: formData.team_members ? formData.team_members.split(",").map(s => s.trim()) : undefined,
       technologies: formData.technologies ? formData.technologies.split(",").map(s => s.trim()) : undefined,
+      features: formData.features ? formData.features.split(",").map(s => s.trim()) : undefined,
       link: formData.link || undefined,
     };
 
@@ -96,6 +100,7 @@ export function ProjectsAdmin() {
         end_date: formData.end_date || null,
         team_members: formData.team_members ? formData.team_members.split(",").map(s => s.trim()) : null,
         technologies: formData.technologies ? formData.technologies.split(",").map(s => s.trim()) : null,
+        features: formData.features ? formData.features.split(",").map(s => s.trim()) : null,
         link: formData.link || null,
       };
 
@@ -252,6 +257,15 @@ export function ProjectsAdmin() {
             error={formErrors.technologies}
           />
 
+          <Textarea
+            label="Fitur-fitur (pisahkan dengan koma)"
+            value={formData.features}
+            onChange={(e) => setFormData({ ...formData, features: e.target.value })}
+            placeholder="Login/Register, Dashboard Admin, CRUD Data, Responsive Design"
+            rows={2}
+            error={formErrors.features}
+          />
+
           <Input
             label="Link Proyek"
             value={formData.link}
@@ -285,15 +299,33 @@ export function ProjectsAdmin() {
               <p className="text-sm text-slate-500 mb-3 line-clamp-2">{project.description}</p>
             )}
             {project.technologies && project.technologies.length > 0 && (
-              <div className="flex flex-wrap gap-1 mb-3">
-                {project.technologies.slice(0, 3).map((tech, i) => (
-                  <span key={i} className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded">
-                    {tech}
-                  </span>
-                ))}
-                {project.technologies.length > 3 && (
-                  <span className="text-xs text-slate-400">+{project.technologies.length - 3}</span>
-                )}
+              <div className="mb-2">
+                <p className="text-xs text-slate-400 mb-1">Teknologi:</p>
+                <div className="flex flex-wrap gap-1">
+                  {project.technologies.slice(0, 3).map((tech, i) => (
+                    <span key={i} className="text-xs bg-blue-100 text-blue-600 px-2 py-0.5 rounded">
+                      {tech}
+                    </span>
+                  ))}
+                  {project.technologies.length > 3 && (
+                    <span className="text-xs text-slate-400">+{project.technologies.length - 3}</span>
+                  )}
+                </div>
+              </div>
+            )}
+            {project.features && project.features.length > 0 && (
+              <div className="mb-3">
+                <p className="text-xs text-slate-400 mb-1">Fitur:</p>
+                <div className="flex flex-wrap gap-1">
+                  {project.features.slice(0, 3).map((feature, i) => (
+                    <span key={i} className="text-xs bg-green-100 text-green-600 px-2 py-0.5 rounded">
+                      {feature}
+                    </span>
+                  ))}
+                  {project.features.length > 3 && (
+                    <span className="text-xs text-slate-400">+{project.features.length - 3}</span>
+                  )}
+                </div>
               </div>
             )}
             <div className="flex justify-end gap-2 pt-2 border-t">

@@ -76,6 +76,7 @@ export const projectSchema = z.object({
   end_date: z.string().optional().or(z.literal("")),
   team_members: z.array(z.string()).optional(),
   technologies: z.array(z.string()).optional(),
+  features: z.array(z.string()).optional(),
   link: z
     .string()
     .url("URL project tidak valid")

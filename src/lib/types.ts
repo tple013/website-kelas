@@ -26,6 +26,7 @@ export interface DbProject {
   end_date: string | null;
   team_members: string[] | null;
   technologies: string[] | null;
+  features: string[] | null;
   link: string | null;
   created_at: string;
 }
@@ -58,6 +59,7 @@ export interface Project {
   title: string;
   description: string;
   technologies: string[];
+  features: string[];
   status: "completed" | "in-progress" | "planned";
   teamMembers: string[];
   githubUrl?: string;
@@ -94,6 +96,7 @@ export function mapDbToProject(db: DbProject): Project {
     status: db.status,
     teamMembers: db.team_members || [],
     technologies: db.technologies || [],
+    features: db.features || [],
     githubUrl: db.link || undefined,
   };
 }
