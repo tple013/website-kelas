@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Card, CardBody, CardFooter } from "@/shared/components/ui/Card";
 import { Badge } from "@/shared/components/ui/Badge";
 import type { Project } from "@/lib/types";
@@ -16,7 +17,21 @@ export function ProjectCard({ project }: ProjectCardProps) {
   const status = statusConfig[project.status];
 
   return (
-    <Card className="flex flex-col h-full group">
+    <Card className="flex flex-col h-full group overflow-hidden">
+      {/* Project Image */}
+      {project.image && (
+        <div className="relative w-full h-48 overflow-hidden">
+          <Image
+            src={project.image}
+            alt={project.title}
+            fill
+            className="object-cover group-hover:scale-105 transition-transform duration-300"
+            sizes="(max-width: 768px) 100vw, 50vw"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+        </div>
+      )}
+      
       <CardBody className="flex-grow p-8">
         {/* Title & Status */}
         <div className="flex justify-between items-start mb-6 gap-4">
@@ -38,13 +53,30 @@ export function ProjectCard({ project }: ProjectCardProps) {
             {project.technologies.map((tech) => (
               <span
                 key={tech}
-                className="bg-slate-100 text-slate-600 border border-slate-200 px-3 py-1 rounded-md text-xs font-medium hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-colors"
+                className="bg-blue-50 text-blue-600 border border-blue-200 px-3 py-1 rounded-md text-xs font-medium hover:bg-blue-100 transition-colors"
               >
                 {tech}
               </span>
             ))}
           </div>
         </div>
+
+        {/* Features */}
+        {project.features.length > 0 && (
+          <div className="mb-6">
+            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Fitur</h3>
+            <div className="flex flex-wrap gap-2">
+              {project.features.map((feature) => (
+                <span
+                  key={feature}
+                  className="bg-green-50 text-green-600 border border-green-200 px-3 py-1 rounded-md text-xs font-medium hover:bg-green-100 transition-colors"
+                >
+                  {feature}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Team */}
         <div>

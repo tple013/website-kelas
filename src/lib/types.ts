@@ -58,6 +58,7 @@ export interface Project {
   id: string;
   title: string;
   description: string;
+  image?: string;
   technologies: string[];
   features: string[];
   status: "completed" | "in-progress" | "planned";
@@ -93,6 +94,7 @@ export function mapDbToProject(db: DbProject): Project {
     id: db.id,
     title: db.title,
     description: db.description || "",
+    image: db.image || undefined,
     status: db.status,
     teamMembers: db.team_members || [],
     technologies: db.technologies || [],
