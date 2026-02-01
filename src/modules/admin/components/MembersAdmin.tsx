@@ -4,6 +4,8 @@ import { useState } from "react";
 import Image from "next/image";
 import { useMembersSupabase } from "@/lib/hooks";
 import { storageService } from "@/lib/services";
+import { memberSchema, validateFile, validateForm } from "@/lib/validations";
+import { Button, Modal, Input, Textarea, Checkbox, FileInput } from "@/shared/components/ui";
 import type { DbMember } from "@/lib/types";
 
 export function MembersAdmin() {
@@ -22,6 +24,8 @@ export function MembersAdmin() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formError, setFormError] = useState<string>("");
+  const [fileError, setFileError] = useState<string>("");
 
   const resetForm = () => {
     setFormData({
@@ -37,6 +41,8 @@ export function MembersAdmin() {
     setPhotoPreview("");
     setEditingMember(null);
     setIsFormOpen(false);
+    setFormError("");
+    setFileError("");
   };
 
   const handleEdit = (member: DbMember) => {
@@ -52,12 +58,23 @@ export function MembersAdmin() {
     });
     setPhotoPreview(member.photo || "");
     setSelectedFile(null);
+    setFormError("");
+    setFileError("");
     setIsFormOpen(true);
   };
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+    setFileError("");
+    
     if (file) {
+      // Validate file
+      const validation = validateFile(file);
+      if (!validation.valid) {
+        setFileError(validation.error || "File tidak valid");
+        return;
+      }
+
       setSelectedFile(file);
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -69,6 +86,16 @@ export function MembersAdmin() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setFormError("");
+    
+    // Validate form data
+    const validation = validateForm(memberSchema, formData);
+    if (!validation.success) {
+      const firstError = Object.values(validation.errors)[0];
+      setFormError(firstError || "Form tidak valid");
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -92,7 +119,7 @@ export function MembersAdmin() {
       }
       resetForm();
     } catch (err) {
-      alert("Gagal menyimpan: " + (err instanceof Error ? err.message : "Unknown error"));
+      setFormError("Gagal menyimpan: " + (err instanceof Error ? err.message : "Unknown error"));
     } finally {
       setIsSubmitting(false);
     }
@@ -110,7 +137,7 @@ export function MembersAdmin() {
       
       await deleteMember(id);
     } catch (err) {
-      alert("Gagal menghapus: " + (err instanceof Error ? err.message : "Unknown error"));
+      setFormError("Gagal menghapus: " + (err instanceof Error ? err.message : "Unknown error"));
     }
   };
 
@@ -140,157 +167,115 @@ export function MembersAdmin() {
           <h2 className="text-lg font-semibold text-slate-900">Daftar Anggota</h2>
           <p className="text-sm text-slate-500">{members.length} anggota terdaftar</p>
         </div>
-        <button
-          onClick={() => setIsFormOpen(true)}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-        >
-          <i className="bi bi-plus-lg mr-2"></i>
+        <Button onClick={() => setIsFormOpen(true)} icon="bi-plus-lg">
           Tambah Anggota
-        </button>
+        </Button>
       </div>
 
       {/* Form Modal */}
-      {isFormOpen && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6 border-b">
-              <h3 className="text-lg font-semibold">
-                {editingMember ? "Edit Anggota" : "Tambah Anggota Baru"}
-              </h3>
+      <Modal
+        isOpen={isFormOpen}
+        onClose={resetForm}
+        title={editingMember ? "Edit Anggota" : "Tambah Anggota Baru"}
+      >
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {formError && (
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+              <i className="bi bi-exclamation-circle mr-2"></i>
+              {formError}
             </div>
-            <form onSubmit={handleSubmit} className="p-6 space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Nama *</label>
-                <input
-                  type="text"
-                  required
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="Nama lengkap"
-                />
-              </div>
+          )}
 
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Foto</label>
-                <div className="space-y-3">
-                  {/* Preview */}
-                  {photoPreview && (
-                    <div className="flex items-center gap-3">
-                      <Image
-                        src={photoPreview}
-                        alt="Preview"
-                        width={64}
-                        height={64}
-                        className="w-16 h-16 rounded-full object-cover border"
-                      />
-                      <div className="text-sm text-slate-600">
-                        {selectedFile ? selectedFile.name : "Foto saat ini"}
-                      </div>
-                    </div>
-                  )}
+          <Input
+            label="Nama *"
+            value={formData.name}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            placeholder="Nama lengkap"
+            required
+          />
 
-                  {/* File Input */}
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleFileSelect}
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">Foto</label>
+            <div className="space-y-3">
+              {photoPreview && (
+                <div className="flex items-center gap-3">
+                  <Image
+                    src={photoPreview}
+                    alt="Preview"
+                    width={64}
+                    height={64}
+                    className="w-16 h-16 rounded-full object-cover border"
                   />
-
-                  {/* URL Input (fallback) */}
-                  <div className="text-xs text-slate-500">
-                    Atau masukkan URL foto langsung:
-                    <input
-                      type="text"
-                      value={formData.photo}
-                      onChange={(e) => setFormData({ ...formData, photo: e.target.value })}
-                      className="w-full mt-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
-                      placeholder="https://..."
-                    />
+                  <div className="text-sm text-slate-600">
+                    {selectedFile ? selectedFile.name : "Foto saat ini"}
                   </div>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Deskripsi</label>
-                <textarea
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  rows={2}
-                  placeholder="Deskripsi singkat"
-                />
-              </div>
-
-              <div className="flex items-center gap-4">
-                <label className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={formData.is_officer}
-                    onChange={(e) => setFormData({ ...formData, is_officer: e.target.checked })}
-                    className="rounded border-slate-300 text-blue-600 focus:ring-blue-500"
-                  />
-                  <span className="text-sm text-slate-700">Pengurus</span>
-                </label>
-              </div>
-
-              {formData.is_officer && (
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Jabatan</label>
-                  <input
-                    type="text"
-                    value={formData.role}
-                    onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="Ketua, Wakil Ketua, dll"
-                  />
                 </div>
               )}
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Instagram</label>
-                  <input
-                    type="text"
-                    value={formData.instagram}
-                    onChange={(e) => setFormData({ ...formData, instagram: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="https://instagram.com/..."
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">LinkedIn</label>
-                  <input
-                    type="text"
-                    value={formData.linkedin}
-                    onChange={(e) => setFormData({ ...formData, linkedin: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="https://linkedin.com/in/..."
-                  />
-                </div>
-              </div>
+              <FileInput
+                accept="image/jpeg,image/png,image/webp,image/gif"
+                onChange={handleFileSelect}
+                error={fileError}
+                hint="Maksimal 5MB. Format: JPG, PNG, WebP, GIF"
+              />
 
-              <div className="flex gap-3 pt-4">
-                <button
-                  type="button"
-                  onClick={resetForm}
-                  className="flex-1 px-4 py-2 border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors"
-                >
-                  Batal
-                </button>
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
-                >
-                  {isSubmitting ? "Menyimpan..." : editingMember ? "Update" : "Simpan"}
-                </button>
-              </div>
-            </form>
+              <Input
+                label="Atau masukkan URL foto"
+                value={formData.photo}
+                onChange={(e) => setFormData({ ...formData, photo: e.target.value })}
+                placeholder="https://..."
+              />
+            </div>
           </div>
-        </div>
-      )}
+
+          <Textarea
+            label="Deskripsi"
+            value={formData.description}
+            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+            placeholder="Deskripsi singkat"
+            rows={2}
+          />
+
+          <Checkbox
+            label="Pengurus"
+            checked={formData.is_officer}
+            onChange={(e) => setFormData({ ...formData, is_officer: e.target.checked })}
+          />
+
+          {formData.is_officer && (
+            <Input
+              label="Jabatan"
+              value={formData.role}
+              onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+              placeholder="Ketua, Wakil Ketua, dll"
+            />
+          )}
+
+          <div className="grid grid-cols-2 gap-4">
+            <Input
+              label="Instagram"
+              value={formData.instagram}
+              onChange={(e) => setFormData({ ...formData, instagram: e.target.value })}
+              placeholder="https://instagram.com/..."
+            />
+            <Input
+              label="LinkedIn"
+              value={formData.linkedin}
+              onChange={(e) => setFormData({ ...formData, linkedin: e.target.value })}
+              placeholder="https://linkedin.com/in/..."
+            />
+          </div>
+
+          <div className="flex gap-3 pt-4">
+            <Button type="button" variant="secondary" onClick={resetForm} className="flex-1">
+              Batal
+            </Button>
+            <Button type="submit" isLoading={isSubmitting} className="flex-1">
+              {editingMember ? "Update" : "Simpan"}
+            </Button>
+          </div>
+        </form>
+      </Modal>
 
       {/* Table */}
       <div className="bg-white rounded-xl shadow-sm border overflow-hidden">

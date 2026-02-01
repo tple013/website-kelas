@@ -2,33 +2,50 @@
 
 import { useState } from "react";
 import { useSchedulesSupabase } from "@/lib/hooks";
+import { scheduleSchema, validateForm } from "@/lib/validations";
+import { Button, Modal, Input, Select } from "@/shared/components/ui";
 import type { DbSchedule } from "@/lib/types";
+
+interface FormData {
+  day: string;
+  subject: string;
+  time_start: string;
+  time_end: string;
+  room: string;
+  lecturer: string;
+}
+
+const initialFormData: FormData = {
+  day: "Senin",
+  subject: "",
+  time_start: "",
+  time_end: "",
+  room: "",
+  lecturer: "",
+};
+
+const dayOptions = [
+  { value: "Senin", label: "Senin" },
+  { value: "Selasa", label: "Selasa" },
+  { value: "Rabu", label: "Rabu" },
+  { value: "Kamis", label: "Kamis" },
+  { value: "Jumat", label: "Jumat" },
+  { value: "Sabtu", label: "Sabtu" },
+];
 
 export function SchedulesAdmin() {
   const { schedules, isLoading, error, addSchedule, updateSchedule, deleteSchedule } = useSchedulesSupabase();
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingSchedule, setEditingSchedule] = useState<DbSchedule | null>(null);
-  const [formData, setFormData] = useState({
-    day: "Senin",
-    subject: "",
-    time_start: "",
-    time_end: "",
-    room: "",
-    lecturer: "",
-  });
+  const [formData, setFormData] = useState<FormData>(initialFormData);
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const days = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
 
   const resetForm = () => {
-    setFormData({
-      day: "Senin",
-      subject: "",
-      time_start: "",
-      time_end: "",
-      room: "",
-      lecturer: "",
-    });
+    setFormData(initialFormData);
+    setFormErrors({});
     setEditingSchedule(null);
     setIsFormOpen(false);
   };
@@ -48,6 +65,24 @@ export function SchedulesAdmin() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate with Zod
+    const validationData = {
+      day: formData.day,
+      subject: formData.subject,
+      time_start: formData.time_start,
+      time_end: formData.time_end,
+      room: formData.room || undefined,
+      lecturer: formData.lecturer || undefined,
+    };
+
+    const validation = validateForm(scheduleSchema, validationData);
+    if (!validation.success) {
+      setFormErrors(validation.errors);
+      return;
+    }
+    
+    setFormErrors({});
     setIsSubmitting(true);
 
     try {
@@ -67,7 +102,7 @@ export function SchedulesAdmin() {
       }
       resetForm();
     } catch (err) {
-      alert("Gagal menyimpan: " + (err instanceof Error ? err.message : "Unknown error"));
+      setFormErrors({ submit: err instanceof Error ? err.message : "Gagal menyimpan data" });
     } finally {
       setIsSubmitting(false);
     }
@@ -79,7 +114,7 @@ export function SchedulesAdmin() {
     try {
       await deleteSchedule(id);
     } catch (err) {
-      alert("Gagal menghapus: " + (err instanceof Error ? err.message : "Unknown error"));
+      setFormErrors({ delete: err instanceof Error ? err.message : "Gagal menghapus" });
     }
   };
 
@@ -118,115 +153,89 @@ export function SchedulesAdmin() {
           <h2 className="text-lg font-semibold text-slate-900">Jadwal Kuliah</h2>
           <p className="text-sm text-slate-500">{schedules.length} jadwal terdaftar</p>
         </div>
-        <button
-          onClick={() => setIsFormOpen(true)}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-        >
-          <i className="bi bi-plus-lg mr-2"></i>
+        <Button onClick={() => setIsFormOpen(true)} icon={<i className="bi bi-plus-lg" />}>
           Tambah Jadwal
-        </button>
+        </Button>
       </div>
 
-      {/* Form Modal */}
-      {isFormOpen && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6 border-b">
-              <h3 className="text-lg font-semibold">
-                {editingSchedule ? "Edit Jadwal" : "Tambah Jadwal Baru"}
-              </h3>
-            </div>
-            <form onSubmit={handleSubmit} className="p-6 space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Hari *</label>
-                <select
-                  value={formData.day}
-                  onChange={(e) => setFormData({ ...formData, day: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                >
-                  {days.map((day) => (
-                    <option key={day} value={day}>{day}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Mata Kuliah *</label>
-                <input
-                  type="text"
-                  required
-                  value={formData.subject}
-                  onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="Nama mata kuliah"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Jam Mulai *</label>
-                  <input
-                    type="time"
-                    required
-                    value={formData.time_start}
-                    onChange={(e) => setFormData({ ...formData, time_start: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Jam Selesai *</label>
-                  <input
-                    type="time"
-                    required
-                    value={formData.time_end}
-                    onChange={(e) => setFormData({ ...formData, time_end: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Ruangan</label>
-                <input
-                  type="text"
-                  value={formData.room}
-                  onChange={(e) => setFormData({ ...formData, room: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="Contoh: Lab 1, Ruang 201"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Dosen</label>
-                <input
-                  type="text"
-                  value={formData.lecturer}
-                  onChange={(e) => setFormData({ ...formData, lecturer: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="Nama dosen pengajar"
-                />
-              </div>
-
-              <div className="flex gap-3 pt-4">
-                <button
-                  type="button"
-                  onClick={resetForm}
-                  className="flex-1 px-4 py-2 border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors"
-                >
-                  Batal
-                </button>
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
-                >
-                  {isSubmitting ? "Menyimpan..." : editingSchedule ? "Update" : "Simpan"}
-                </button>
-              </div>
-            </form>
-          </div>
+      {/* Error Alert */}
+      {(formErrors.delete || formErrors.submit) && (
+        <div className="mb-4 bg-red-50 border border-red-200 rounded-lg p-3 text-red-700 text-sm">
+          <i className="bi bi-exclamation-triangle mr-2" />
+          {formErrors.delete || formErrors.submit}
         </div>
       )}
+
+      {/* Form Modal */}
+      <Modal
+        isOpen={isFormOpen}
+        onClose={resetForm}
+        title={editingSchedule ? "Edit Jadwal" : "Tambah Jadwal Baru"}
+      >
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <Select
+            label="Hari"
+            required
+            value={formData.day}
+            onChange={(e) => setFormData({ ...formData, day: e.target.value })}
+            options={dayOptions}
+            error={formErrors.day}
+          />
+
+          <Input
+            label="Mata Kuliah"
+            required
+            value={formData.subject}
+            onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+            placeholder="Nama mata kuliah"
+            error={formErrors.subject}
+          />
+
+          <div className="grid grid-cols-2 gap-4">
+            <Input
+              label="Jam Mulai"
+              type="time"
+              required
+              value={formData.time_start}
+              onChange={(e) => setFormData({ ...formData, time_start: e.target.value })}
+              error={formErrors.time_start}
+            />
+            <Input
+              label="Jam Selesai"
+              type="time"
+              required
+              value={formData.time_end}
+              onChange={(e) => setFormData({ ...formData, time_end: e.target.value })}
+              error={formErrors.time_end}
+            />
+          </div>
+
+          <Input
+            label="Ruangan"
+            value={formData.room}
+            onChange={(e) => setFormData({ ...formData, room: e.target.value })}
+            placeholder="Contoh: Lab 1, Ruang 201"
+            error={formErrors.room}
+          />
+
+          <Input
+            label="Dosen"
+            value={formData.lecturer}
+            onChange={(e) => setFormData({ ...formData, lecturer: e.target.value })}
+            placeholder="Nama dosen pengajar"
+            error={formErrors.lecturer}
+          />
+
+          <div className="flex gap-3 pt-4">
+            <Button type="button" variant="secondary" onClick={resetForm} className="flex-1">
+              Batal
+            </Button>
+            <Button type="submit" isLoading={isSubmitting} className="flex-1">
+              {editingSchedule ? "Update" : "Simpan"}
+            </Button>
+          </div>
+        </form>
+      </Modal>
 
       {/* Schedule by Day */}
       <div className="space-y-6">

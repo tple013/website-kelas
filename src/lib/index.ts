@@ -2,7 +2,7 @@
 export { supabase } from "./supabase";
 
 // Services
-export { membersService, projectsService, schedulesService } from "./services";
+export { membersService, projectsService, schedulesService, storageService } from "./services";
 
 // Types
 export type {
@@ -31,8 +31,21 @@ export { getAssetPath, getAvatarFallback } from "./utils";
 
 // Auth
 export { AuthProvider, useAuth } from "./auth";
+export type { UserRole, Profile } from "./auth";
 
 // Hooks
 export { useMembersSupabase } from "./hooks/useMembersSupabase";
 export { useProjectsSupabase } from "./hooks/useProjectsSupabase";
 export { useSchedulesSupabase } from "./hooks/useSchedulesSupabase";
+
+// Validations
+export {
+  memberSchema,
+  projectSchema,
+  scheduleSchema,
+  loginSchema,
+  validateFile,
+  validateForm,
+  FILE_UPLOAD,
+} from "./validations";
+export type { MemberFormData, ProjectFormData, ScheduleFormData, LoginFormData } from "./validations";

@@ -19,5 +19,12 @@ if (!supabaseUrl || !supabaseAnonKey) {
 
 export const supabase = createClient(
   supabaseUrl || "",
-  supabaseAnonKey || ""
+  supabaseAnonKey || "",
+  {
+    auth: {
+      // Session tidak disimpan - refresh/ketik ulang URL = logout
+      persistSession: false,
+      autoRefreshToken: false,
+    }
+  }
 );

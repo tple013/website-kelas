@@ -2,37 +2,45 @@
 
 import { useState } from "react";
 import { useProjectsSupabase } from "@/lib/hooks";
+import { projectSchema, validateForm } from "@/lib/validations";
+import { Button, Modal, Input, Textarea, Select } from "@/shared/components/ui";
 import type { DbProject } from "@/lib/types";
+
+interface FormData {
+  title: string;
+  description: string;
+  image: string;
+  status: string;
+  start_date: string;
+  end_date: string;
+  team_members: string;
+  technologies: string;
+  link: string;
+}
+
+const initialFormData: FormData = {
+  title: "",
+  description: "",
+  image: "",
+  status: "ongoing",
+  start_date: "",
+  end_date: "",
+  team_members: "",
+  technologies: "",
+  link: "",
+};
 
 export function ProjectsAdmin() {
   const { projects, isLoading, error, addProject, updateProject, deleteProject } = useProjectsSupabase();
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingProject, setEditingProject] = useState<DbProject | null>(null);
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    image: "",
-    status: "ongoing",
-    start_date: "",
-    end_date: "",
-    team_members: "",
-    technologies: "",
-    link: "",
-  });
+  const [formData, setFormData] = useState<FormData>(initialFormData);
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const resetForm = () => {
-    setFormData({
-      title: "",
-      description: "",
-      image: "",
-      status: "ongoing",
-      start_date: "",
-      end_date: "",
-      team_members: "",
-      technologies: "",
-      link: "",
-    });
+    setFormData(initialFormData);
+    setFormErrors({});
     setEditingProject(null);
     setIsFormOpen(false);
   };
@@ -55,6 +63,27 @@ export function ProjectsAdmin() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate with Zod
+    const validationData = {
+      title: formData.title,
+      description: formData.description || undefined,
+      image: formData.image || undefined,
+      status: formData.status,
+      start_date: formData.start_date || undefined,
+      end_date: formData.end_date || undefined,
+      team_members: formData.team_members ? formData.team_members.split(",").map(s => s.trim()) : undefined,
+      technologies: formData.technologies ? formData.technologies.split(",").map(s => s.trim()) : undefined,
+      link: formData.link || undefined,
+    };
+
+    const validation = validateForm(projectSchema, validationData);
+    if (!validation.success) {
+      setFormErrors(validation.errors);
+      return;
+    }
+    
+    setFormErrors({});
     setIsSubmitting(true);
 
     try {
@@ -77,7 +106,7 @@ export function ProjectsAdmin() {
       }
       resetForm();
     } catch (err) {
-      alert("Gagal menyimpan: " + (err instanceof Error ? err.message : "Unknown error"));
+      setFormErrors({ submit: err instanceof Error ? err.message : "Gagal menyimpan data" });
     } finally {
       setIsSubmitting(false);
     }
@@ -89,24 +118,26 @@ export function ProjectsAdmin() {
     try {
       await deleteProject(id);
     } catch (err) {
-      alert("Gagal menghapus: " + (err instanceof Error ? err.message : "Unknown error"));
+      setFormErrors({ delete: err instanceof Error ? err.message : "Gagal menghapus" });
     }
   };
 
   const statusOptions = [
-    { value: "ongoing", label: "Sedang Berjalan", color: "bg-blue-100 text-blue-700" },
-    { value: "completed", label: "Selesai", color: "bg-green-100 text-green-700" },
-    { value: "planned", label: "Direncanakan", color: "bg-yellow-100 text-yellow-700" },
-    { value: "cancelled", label: "Dibatalkan", color: "bg-red-100 text-red-700" },
+    { value: "ongoing", label: "Sedang Berjalan" },
+    { value: "completed", label: "Selesai" },
+    { value: "planned", label: "Direncanakan" },
+    { value: "cancelled", label: "Dibatalkan" },
   ];
 
-  const getStatusStyle = (status: string) => {
-    return statusOptions.find(s => s.value === status)?.color || "bg-slate-100 text-slate-600";
+  const statusColors: Record<string, string> = {
+    ongoing: "bg-blue-100 text-blue-700",
+    completed: "bg-green-100 text-green-700",
+    planned: "bg-yellow-100 text-yellow-700",
+    cancelled: "bg-red-100 text-red-700",
   };
 
-  const getStatusLabel = (status: string) => {
-    return statusOptions.find(s => s.value === status)?.label || status;
-  };
+  const getStatusStyle = (status: string) => statusColors[status] || "bg-slate-100 text-slate-600";
+  const getStatusLabel = (status: string) => statusOptions.find(s => s.value === status)?.label || status;
 
   if (isLoading) {
     return (
@@ -134,148 +165,111 @@ export function ProjectsAdmin() {
           <h2 className="text-lg font-semibold text-slate-900">Daftar Proyek</h2>
           <p className="text-sm text-slate-500">{projects.length} proyek terdaftar</p>
         </div>
-        <button
-          onClick={() => setIsFormOpen(true)}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-        >
-          <i className="bi bi-plus-lg mr-2"></i>
+        <Button onClick={() => setIsFormOpen(true)} icon={<i className="bi bi-plus-lg" />}>
           Tambah Proyek
-        </button>
+        </Button>
       </div>
 
-      {/* Form Modal */}
-      {isFormOpen && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6 border-b">
-              <h3 className="text-lg font-semibold">
-                {editingProject ? "Edit Proyek" : "Tambah Proyek Baru"}
-              </h3>
-            </div>
-            <form onSubmit={handleSubmit} className="p-6 space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Judul Proyek *</label>
-                <input
-                  type="text"
-                  required
-                  value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="Nama proyek"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Deskripsi</label>
-                <textarea
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  rows={3}
-                  placeholder="Deskripsi proyek"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">URL Gambar</label>
-                <input
-                  type="text"
-                  value={formData.image}
-                  onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="https://..."
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Status</label>
-                <select
-                  value={formData.status}
-                  onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                >
-                  {statusOptions.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Tanggal Mulai</label>
-                  <input
-                    type="date"
-                    value={formData.start_date}
-                    onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Tanggal Selesai</label>
-                  <input
-                    type="date"
-                    value={formData.end_date}
-                    onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Tim (pisahkan dengan koma)</label>
-                <input
-                  type="text"
-                  value={formData.team_members}
-                  onChange={(e) => setFormData({ ...formData, team_members: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="John, Jane, Bob"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Teknologi (pisahkan dengan koma)</label>
-                <input
-                  type="text"
-                  value={formData.technologies}
-                  onChange={(e) => setFormData({ ...formData, technologies: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="React, Node.js, PostgreSQL"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Link Proyek</label>
-                <input
-                  type="text"
-                  value={formData.link}
-                  onChange={(e) => setFormData({ ...formData, link: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="https://github.com/..."
-                />
-              </div>
-
-              <div className="flex gap-3 pt-4">
-                <button
-                  type="button"
-                  onClick={resetForm}
-                  className="flex-1 px-4 py-2 border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors"
-                >
-                  Batal
-                </button>
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
-                >
-                  {isSubmitting ? "Menyimpan..." : editingProject ? "Update" : "Simpan"}
-                </button>
-              </div>
-            </form>
-          </div>
+      {/* Error Alert */}
+      {(formErrors.delete || formErrors.submit) && (
+        <div className="mb-4 bg-red-50 border border-red-200 rounded-lg p-3 text-red-700 text-sm">
+          <i className="bi bi-exclamation-triangle mr-2" />
+          {formErrors.delete || formErrors.submit}
         </div>
       )}
+
+      {/* Form Modal */}
+      <Modal
+        isOpen={isFormOpen}
+        onClose={resetForm}
+        title={editingProject ? "Edit Proyek" : "Tambah Proyek Baru"}
+      >
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <Input
+            label="Judul Proyek"
+            required
+            value={formData.title}
+            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+            placeholder="Nama proyek"
+            error={formErrors.title}
+          />
+
+          <Textarea
+            label="Deskripsi"
+            value={formData.description}
+            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+            placeholder="Deskripsi proyek"
+            rows={3}
+            error={formErrors.description}
+          />
+
+          <Input
+            label="URL Gambar"
+            value={formData.image}
+            onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+            placeholder="https://..."
+            error={formErrors.image}
+          />
+
+          <Select
+            label="Status"
+            value={formData.status}
+            onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+            options={statusOptions}
+            error={formErrors.status}
+          />
+
+          <div className="grid grid-cols-2 gap-4">
+            <Input
+              label="Tanggal Mulai"
+              type="date"
+              value={formData.start_date}
+              onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
+              error={formErrors.start_date}
+            />
+            <Input
+              label="Tanggal Selesai"
+              type="date"
+              value={formData.end_date}
+              onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
+              error={formErrors.end_date}
+            />
+          </div>
+
+          <Input
+            label="Tim (pisahkan dengan koma)"
+            value={formData.team_members}
+            onChange={(e) => setFormData({ ...formData, team_members: e.target.value })}
+            placeholder="John, Jane, Bob"
+            error={formErrors.team_members}
+          />
+
+          <Input
+            label="Teknologi (pisahkan dengan koma)"
+            value={formData.technologies}
+            onChange={(e) => setFormData({ ...formData, technologies: e.target.value })}
+            placeholder="React, Node.js, PostgreSQL"
+            error={formErrors.technologies}
+          />
+
+          <Input
+            label="Link Proyek"
+            value={formData.link}
+            onChange={(e) => setFormData({ ...formData, link: e.target.value })}
+            placeholder="https://github.com/..."
+            error={formErrors.link}
+          />
+
+          <div className="flex gap-3 pt-4">
+            <Button type="button" variant="secondary" onClick={resetForm} className="flex-1">
+              Batal
+            </Button>
+            <Button type="submit" isLoading={isSubmitting} className="flex-1">
+              {editingProject ? "Update" : "Simpan"}
+            </Button>
+          </div>
+        </form>
+      </Modal>
 
       {/* Cards Grid */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

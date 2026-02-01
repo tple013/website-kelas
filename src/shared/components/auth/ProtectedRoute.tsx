@@ -6,31 +6,36 @@ import { useAuth } from "@/lib/auth";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
+  requireAdmin?: boolean;
 }
 
-export function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const { user, isLoading } = useAuth();
+export function ProtectedRoute({ children, requireAdmin = false }: ProtectedRouteProps) {
+  const { isAuthenticated, role } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (!isLoading && !user) {
-      router.push("/admin/login");
+    // Not logged in = redirect to login
+    if (!isAuthenticated) {
+      router.replace("/admin/login");
     }
-  }, [user, isLoading, router]);
+  }, [isAuthenticated, router]);
 
-  if (isLoading) {
+  // Not authenticated
+  if (!isAuthenticated) {
+    return null;
+  }
+
+  // Require admin but user is not admin
+  if (requireAdmin && role !== 'admin') {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-slate-600">Memuat...</p>
+          <div className="text-6xl mb-4">🔒</div>
+          <h2 className="text-xl font-semibold text-red-600">Akses Ditolak</h2>
+          <p className="text-slate-600 mt-2">Halaman ini hanya untuk admin.</p>
         </div>
       </div>
     );
-  }
-
-  if (!user) {
-    return null;
   }
 
   return <>{children}</>;

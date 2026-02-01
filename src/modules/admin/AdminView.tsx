@@ -9,7 +9,7 @@ type Tab = "members" | "projects" | "schedules" | "users";
 
 function AdminContent() {
   const [activeTab, setActiveTab] = useState<Tab>("members");
-  const { user, role, signOut } = useAuth();
+  const { user, profile, role, signOut } = useAuth();
 
   const allTabs = [
     { id: "members" as Tab, label: "Anggota", icon: "bi-people" },
@@ -27,6 +27,10 @@ function AdminContent() {
     }
   };
 
+  // Display name: prefer full_name, fallback to email
+  const displayName = profile?.full_name || user?.email || 'User';
+  const roleLabel = role === 'admin' ? 'Pengurus Kelas' : 'Anggota';
+
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Header */}
@@ -42,8 +46,8 @@ function AdminContent() {
             </div>
             <div className="flex items-center gap-4">
               <div className="text-right">
-                <p className="text-sm font-medium text-slate-900">{user?.email}</p>
-                <p className="text-xs text-slate-500">{role === 'admin' ? 'Pengurus Kelas' : 'Anggota'}</p>
+                <p className="text-sm font-medium text-slate-900">{displayName}</p>
+                <p className="text-xs text-slate-500">{roleLabel}</p>
               </div>
               <button
                 onClick={handleLogout}

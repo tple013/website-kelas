@@ -183,40 +183,52 @@ export const schedulesService = {
 // =====================================================
 export const storageService = {
   async uploadAvatar(file: File, fileName: string): Promise<string> {
-    const fileExt = file.name.split('.').pop();
-    const fileNameWithExt = `${fileName}.${fileExt}`;
-    const filePath = `avatars/${fileNameWithExt}`;
+    const fileExt = file.name.split('.').pop()?.toLowerCase() || 'jpg';
+    // Sanitize filename - hanya alphanumeric dan dash
+    const sanitizedName = fileName.replace(/[^a-zA-Z0-9-]/g, '');
+    const uniqueName = `${sanitizedName}-${Date.now()}.${fileExt}`;
 
     const { error: uploadError } = await supabase.storage
       .from('avatars')
-      .upload(filePath, file, {
+      .upload(uniqueName, file, {
         cacheControl: '3600',
-        upsert: false
+        upsert: true  // Allow overwrite
       });
 
     if (uploadError) {
-      throw uploadError;
+      console.error('Upload error:', uploadError);
+      throw new Error(`Gagal upload: ${uploadError.message}`);
     }
 
     const { data } = supabase.storage
       .from('avatars')
-      .getPublicUrl(filePath);
+      .getPublicUrl(uniqueName);
 
     return data.publicUrl;
   },
 
   async deleteAvatar(url: string): Promise<void> {
-    // Extract file path from public URL
-    const urlParts = url.split('/');
-    const fileName = urlParts[urlParts.length - 1];
-    const filePath = `avatars/${fileName}`;
+    try {
+      // Extract filename dari URL
+      // URL format: https://xxx.supabase.co/storage/v1/object/public/avatars/filename.jpg
+      const urlObj = new URL(url);
+      const pathParts = urlObj.pathname.split('/');
+      const fileName = pathParts[pathParts.length - 1];
 
-    const { error } = await supabase.storage
-      .from('avatars')
-      .remove([filePath]);
+      if (!fileName) {
+        console.warn('Could not extract filename from URL:', url);
+        return;
+      }
 
-    if (error) {
-      console.warn('Failed to delete avatar:', error);
+      const { error } = await supabase.storage
+        .from('avatars')
+        .remove([fileName]);
+
+      if (error) {
+        console.warn('Failed to delete avatar:', error);
+      }
+    } catch (err) {
+      console.warn('Error deleting avatar:', err);
     }
   },
 };

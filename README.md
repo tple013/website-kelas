@@ -1,6 +1,7 @@
-# 🎓 TPLE013 Class Website
+# 🎓 Website Kelas TPLE013
 
-Website resmi kelas **TPLE013** - Universitas Pamulang. Dibangun dengan Next.js 16, React 19, TailwindCSS 4, dan Supabase.
+Website resmi kelas **TPLE013** - Universitas Pamulang.  
+Dibangun dengan Next.js 16, React 19, TailwindCSS 4, dan Supabase.
 
 ![Next.js](https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js)
 ![React](https://img.shields.io/badge/React-19-blue?style=flat-square&logo=react)
@@ -13,296 +14,468 @@ Website resmi kelas **TPLE013** - Universitas Pamulang. Dibangun dengan Next.js 
 ## 📋 Daftar Isi
 
 - [Fitur](#-fitur)
-- [Demo](#-demo)
+- [Arsitektur Project](#-arsitektur-project)
+- [Flow Aplikasi](#-flow-aplikasi)
+- [Struktur Folder](#-struktur-folder)
+- [Database Schema](#-database-schema)
+- [Authentication Flow](#-authentication-flow)
 - [Cara Menjalankan](#-cara-menjalankan)
-- [Struktur Direktori](#-struktur-direktori)
-- [Admin Panel](#-admin-panel)
-- [Teknologi yang Digunakan](#-teknologi-yang-digunakan)
+- [Environment Variables](#-environment-variables)
 
 ---
 
 ## ✨ Fitur
 
-- 🏠 **Beranda** - Landing page dengan visi misi kelas
-- 👥 **Anggota** - Daftar seluruh anggota kelas dengan foto dan social links
-- 📁 **Proyek** - Showcase proyek-proyek kelas
-- 📅 **Jadwal** - Jadwal kuliah per hari
-- ℹ️ **Tentang** - Informasi tentang kelas
-- 🔐 **Admin Panel** - CRUD untuk mengelola data (protected)
-- 🗄️ **Supabase** - Real-time database dengan Row Level Security
+### Halaman Publik (Tanpa Login)
+| Halaman | Route | Deskripsi |
+|---------|-------|-----------|
+| 🏠 Beranda | `/` | Landing page dengan hero section dan visi misi |
+| 👥 Anggota | `/members` | Daftar anggota kelas dengan foto dan social links |
+| 📁 Proyek | `/projects` | Showcase proyek-proyek kelas |
+| 📅 Jadwal | `/schedule` | Jadwal kuliah per hari |
+| ℹ️ Tentang | `/about` | Informasi tentang kelas |
+
+### Admin Panel (Perlu Login)
+| Fitur | Deskripsi | Akses |
+|-------|-----------|-------|
+| 🔐 Login | Autentikasi dengan email/password | Semua user terdaftar |
+| 👥 Kelola Anggota | CRUD data anggota + upload foto | Admin & Member |
+| 📁 Kelola Proyek | CRUD data proyek | Admin only |
+| 📅 Kelola Jadwal | CRUD jadwal kuliah | Admin only |
+| 👤 Kelola Users | Ubah role user (admin/member) | Admin only |
 
 ---
 
-## 🌐 Demo
+## 🏗 Arsitektur Project
 
-Website dapat diakses di: [https://tple013.github.io/website-kelas](https://tple013.github.io/website-kelas)
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                         FRONTEND                                │
+│  ┌─────────────────────────────────────────────────────────┐   │
+│  │                    Next.js App Router                    │   │
+│  │  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐    │   │
+│  │  │  Home   │  │ Members │  │ Projects│  │ Schedule│    │   │
+│  │  │  Page   │  │  Page   │  │  Page   │  │  Page   │    │   │
+│  │  └────┬────┘  └────┬────┘  └────┬────┘  └────┬────┘    │   │
+│  │       │            │            │            │          │   │
+│  │  ┌────▼────────────▼────────────▼────────────▼────┐    │   │
+│  │  │              MODULES (Views)                    │    │   │
+│  │  │   HomeView, MembersView, ProjectsView, etc.    │    │   │
+│  │  └────────────────────┬───────────────────────────┘    │   │
+│  │                       │                                 │   │
+│  │  ┌────────────────────▼───────────────────────────┐    │   │
+│  │  │              CUSTOM HOOKS                       │    │   │
+│  │  │   useMembersSupabase, useProjectsSupabase, etc │    │   │
+│  │  └────────────────────┬───────────────────────────┘    │   │
+│  │                       │                                 │   │
+│  │  ┌────────────────────▼───────────────────────────┐    │   │
+│  │  │              SUPABASE CLIENT                    │    │   │
+│  │  │   Auth, Database Queries, Storage              │    │   │
+│  │  └────────────────────┬───────────────────────────┘    │   │
+│  └───────────────────────┼─────────────────────────────────┘   │
+└──────────────────────────┼──────────────────────────────────────┘
+                           │
+                           ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                        SUPABASE (Backend)                       │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐          │
+│  │     Auth     │  │   Database   │  │   Storage    │          │
+│  │  (Login/     │  │  (PostgreSQL)│  │  (Avatars)   │          │
+│  │   Logout)    │  │              │  │              │          │
+│  └──────────────┘  └──────────────┘  └──────────────┘          │
+│                                                                 │
+│  ┌─────────────────────────────────────────────────────────┐   │
+│  │              ROW LEVEL SECURITY (RLS)                    │   │
+│  │   - Public: Read semua data                              │   │
+│  │   - Member: CRUD members                                 │   │
+│  │   - Admin: CRUD semua tabel + manage users               │   │
+│  └─────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🔄 Flow Aplikasi
+
+### 1. Flow Halaman Publik
+
+```
+User mengakses website
+        │
+        ▼
+┌───────────────────┐
+│   Next.js Router  │
+│   (app/page.tsx)  │
+└────────┬──────────┘
+         │
+         ▼
+┌───────────────────┐
+│   Module View     │
+│   (HomeView.tsx)  │
+└────────┬──────────┘
+         │
+         ▼
+┌───────────────────┐
+│   Custom Hook     │  ◄── Fetch data dari Supabase
+│ (useMembersSupabase) │
+└────────┬──────────┘
+         │
+         ▼
+┌───────────────────┐
+│   Supabase Client │  ◄── Query ke database
+│   (supabase.ts)   │
+└────────┬──────────┘
+         │
+         ▼
+┌───────────────────┐
+│  Supabase Backend │  ◄── Return data (JSON)
+│   (PostgreSQL)    │
+└───────────────────┘
+```
+
+### 2. Flow Login Admin
+
+```
+User akses /admin/login
+        │
+        ▼
+┌───────────────────┐
+│  Login Form       │  ◄── Input email & password
+│  + Zod Validation │
+└────────┬──────────┘
+         │
+         ▼
+┌───────────────────┐
+│   AuthContext     │
+│   signIn()        │
+└────────┬──────────┘
+         │
+         ▼
+┌───────────────────────────────────────┐
+│  1. supabase.auth.signInWithPassword  │
+│  2. Fetch profile dari tabel profiles │
+│  3. Update AuthState                  │
+│  4. Redirect ke /admin                │
+└───────────────────────────────────────┘
+```
+
+### 3. Flow CRUD Admin
+
+```
+Admin klik "Tambah Anggota"
+        │
+        ▼
+┌───────────────────┐
+│   Modal Form      │
+│   + Validation    │
+└────────┬──────────┘
+         │
+         ▼
+┌───────────────────┐
+│   Custom Hook     │
+│   addMember()     │
+└────────┬──────────┘
+         │
+         ▼
+┌───────────────────┐
+│  Upload foto ke   │  ◄── Jika ada foto
+│  Supabase Storage │
+└────────┬──────────┘
+         │
+         ▼
+┌───────────────────┐
+│  INSERT ke tabel  │
+│  members          │
+└────────┬──────────┘
+         │
+         ▼
+┌───────────────────┐
+│  Refresh data     │  ◄── Otomatis update UI
+│  (state update)   │
+└───────────────────┘
+```
+
+---
+
+## 📁 Struktur Folder
+
+```
+src/
+├── app/                      # Next.js App Router (Routes)
+│   ├── layout.tsx           # Root layout (AuthProvider, Header, Footer)
+│   ├── page.tsx             # Home page (/)
+│   ├── globals.css          # Global styles
+│   ├── members/page.tsx     # Members page (/members)
+│   ├── projects/page.tsx    # Projects page (/projects)
+│   ├── schedule/page.tsx    # Schedule page (/schedule)
+│   ├── about/page.tsx       # About page (/about)
+│   └── admin/
+│       ├── layout.tsx       # Admin layout (ProtectedRoute)
+│       ├── page.tsx         # Admin dashboard (/admin)
+│       └── login/page.tsx   # Login page (/admin/login)
+│
+├── lib/                      # Core Libraries & Services
+│   ├── supabase.ts          # Supabase client instance
+│   ├── auth.tsx             # AuthContext & AuthProvider
+│   ├── types.ts             # TypeScript type definitions
+│   ├── validations.ts       # Zod schemas untuk form validation
+│   ├── services.ts          # Storage service (upload foto)
+│   ├── utils.ts             # Utility functions
+│   └── hooks/               # Custom hooks untuk data fetching
+│       ├── useMembersSupabase.ts
+│       ├── useProjectsSupabase.ts
+│       └── useSchedulesSupabase.ts
+│
+├── modules/                  # Feature Modules
+│   ├── home/
+│   │   ├── HomeView.tsx     # Main view component
+│   │   └── components/      # Sub-components
+│   │       ├── HeroSection.tsx
+│   │       └── VisionMission.tsx
+│   ├── members/
+│   │   ├── MembersView.tsx
+│   │   └── components/
+│   │       ├── MemberCard.tsx
+│   │       └── OfficerCard.tsx
+│   ├── projects/
+│   │   ├── ProjectsView.tsx
+│   │   └── components/
+│   │       └── ProjectCard.tsx
+│   ├── schedule/
+│   │   ├── ScheduleView.tsx
+│   │   └── components/
+│   │       ├── DayCard.tsx
+│   │       └── ScheduleGrid.tsx
+│   ├── about/
+│   │   └── AboutView.tsx
+│   └── admin/
+│       ├── AdminView.tsx    # Tab container
+│       └── components/
+│           ├── MembersAdmin.tsx   # CRUD Anggota
+│           ├── ProjectsAdmin.tsx  # CRUD Proyek
+│           ├── SchedulesAdmin.tsx # CRUD Jadwal
+│           └── UsersAdmin.tsx     # Manage Roles
+│
+└── shared/                   # Shared Components
+    ├── components/
+    │   ├── layout/
+    │   │   ├── Header.tsx   # Navigation bar
+    │   │   └── Footer.tsx   # Footer
+    │   ├── ui/              # Reusable UI components
+    │   │   ├── Button.tsx
+    │   │   ├── Modal.tsx
+    │   │   ├── Input.tsx
+    │   │   ├── Card.tsx
+    │   │   ├── Badge.tsx
+    │   │   └── Skeleton.tsx
+    │   └── auth/
+    │       └── ProtectedRoute.tsx
+    └── hooks/
+        └── useFetch.ts
+```
+
+---
+
+## 🗄 Database Schema
+
+### Tabel: `profiles`
+Menyimpan data user yang login (terhubung dengan Supabase Auth)
+
+| Column | Type | Description |
+|--------|------|-------------|
+| id | uuid | Primary key (sama dengan auth.users.id) |
+| email | text | Email user |
+| full_name | text | Nama lengkap |
+| avatar_url | text | URL foto profil |
+| role | user_role | 'admin' atau 'member' |
+| created_at | timestamp | Waktu dibuat |
+
+### Tabel: `members`
+Menyimpan data anggota kelas
+
+| Column | Type | Description |
+|--------|------|-------------|
+| id | uuid | Primary key |
+| name | text | Nama anggota |
+| photo | text | URL foto |
+| description | text | Deskripsi/bio |
+| role | text | Jabatan (Ketua, Wakil, dll) |
+| is_officer | boolean | Pengurus atau bukan |
+| instagram | text | Link Instagram |
+| linkedin | text | Link LinkedIn |
+
+### Tabel: `projects`
+Menyimpan data proyek kelas
+
+| Column | Type | Description |
+|--------|------|-------------|
+| id | uuid | Primary key |
+| title | text | Judul proyek |
+| description | text | Deskripsi |
+| image | text | URL gambar |
+| status | text | completed/in-progress/planned |
+| start_date | date | Tanggal mulai |
+| end_date | date | Tanggal selesai |
+| team_members | text[] | Array nama anggota tim |
+| technologies | text[] | Array teknologi |
+| link | text | Link proyek |
+
+### Tabel: `schedules`
+Menyimpan jadwal kuliah
+
+| Column | Type | Description |
+|--------|------|-------------|
+| id | uuid | Primary key |
+| day | text | Hari (Senin, Selasa, dll) |
+| subject | text | Nama mata kuliah |
+| time_start | time | Jam mulai |
+| time_end | time | Jam selesai |
+| room | text | Ruangan |
+| lecturer | text | Nama dosen |
+
+---
+
+## 🔐 Authentication Flow
+
+### Konsep Utama
+
+1. **Session TIDAK disimpan** (`persistSession: false`)
+   - Refresh halaman = logout otomatis
+   - Lebih aman untuk komputer bersama
+
+2. **Role-based Access Control**
+   - `admin`: Akses penuh ke semua fitur
+   - `member`: Hanya bisa kelola data anggota
+
+### Komponen Auth
+
+```typescript
+// src/lib/auth.tsx
+
+// 1. AuthState - Menyimpan status login
+interface AuthState {
+  user: User | null;        // Data user dari Supabase Auth
+  session: Session | null;  // Session token
+  profile: Profile | null;  // Data dari tabel profiles (termasuk role)
+  isAuthenticated: boolean; // True jika sudah login
+}
+
+// 2. AuthContext - Menyediakan fungsi auth ke seluruh app
+interface AuthContextType {
+  ...AuthState,
+  role: UserRole;           // 'admin' | 'member' | null
+  signIn(): Promise<...>;   // Fungsi login
+  signOut(): Promise<void>; // Fungsi logout
+  refreshProfile(): Promise<void>; // Refresh data profile
+}
+```
+
+### ProtectedRoute
+
+```typescript
+// src/shared/components/auth/ProtectedRoute.tsx
+
+// Membungkus halaman yang butuh login
+<ProtectedRoute requiredRole="admin">
+  <AdminContent />  {/* Hanya tampil jika role === 'admin' */}
+</ProtectedRoute>
+```
 
 ---
 
 ## 🚀 Cara Menjalankan
 
 ### Prasyarat
-- [Node.js](https://nodejs.org/) versi 18+
-- npm (sudah termasuk dengan Node.js)
-- Akun [Supabase](https://supabase.com/) (gratis)
+- Node.js 18+
+- npm
+- Akun Supabase (gratis)
 
-### Langkah-langkah
+### 1. Clone & Install
 
-1. **Clone repository**
-   ```bash
-   git clone https://github.com/tple013/website-kelas.git
-   cd website-kelas
-   ```
+```bash
+git clone <repo-url>
+cd website-kelas
+npm install
+```
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
+### 2. Setup Supabase
 
-3. **Setup Supabase**
-   - Buat project baru di [Supabase](https://supabase.com/)
-   - Jalankan SQL dari `supabase-setup.sql` di SQL Editor
-   - **Setup Storage**:
-     - Pergi ke Storage di sidebar
-     - Buat bucket baru bernama `avatars`
-     - Set bucket menjadi **Public** (uncheck "Private")
-     - Set policy: Allow all operations for authenticated users
-   - Buat user admin di Authentication > Users
+1. Buat project baru di [supabase.com](https://supabase.com)
+2. Jalankan SQL di `supabase-setup.sql` pada SQL Editor
+3. Copy URL dan Anon Key dari Project Settings > API
 
-4. **Konfigurasi environment**
-   ```bash
-   cp .env.example .env.local
-   ```
-   Isi dengan credentials Supabase:
-   ```env
-   NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
-   ```
+### 3. Environment Variables
 
-5. **Jalankan development server**
-   ```bash
-   npm run dev
-   ```
+Buat file `.env.local`:
 
-6. **Buka di browser**: [http://localhost:3000](http://localhost:3000)
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://xxxxx.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6...
+```
 
-### Perintah
+### 4. Jalankan Development Server
 
-| Perintah | Fungsi |
-|----------|--------|
-| `npm run dev` | Development mode |
-| `npm run build` | Build production |
-| `npm run start` | Jalankan build |
-| `npm run lint` | Cek kualitas kode |
+```bash
+npm run dev
+```
+
+Buka [http://localhost:3000](http://localhost:3000)
 
 ---
 
-## 📁 Struktur Direktori
+## 🔑 Environment Variables
 
-```
-website-kelas/
-├── public/                     # File statis (gambar, favicon)
-│   └── avatars/                # Foto anggota
-│
-├── src/
-│   ├── app/                    # Next.js App Router
-│   │   ├── layout.tsx          # Layout utama
-│   │   ├── page.tsx            # Halaman Beranda
-│   │   ├── globals.css         # Style global
-│   │   ├── about/              # /about
-│   │   ├── members/            # /members
-│   │   ├── projects/           # /projects
-│   │   ├── schedule/           # /schedule
-│   │   └── admin/              # /admin (protected)
-│   │       ├── page.tsx        # Admin panel
-│   │       ├── login/          # Login page
-│   │       └── layout.tsx      # Auth provider
-│   │
-│   ├── lib/                    # Core utilities
-│   │   ├── index.ts            # Barrel exports
-│   │   ├── types.ts            # Type definitions
-│   │   ├── services.ts         # Supabase CRUD
-│   │   ├── supabase.ts         # Supabase client
-│   │   ├── auth.tsx            # Auth context
-│   │   ├── utils.ts            # Helper functions
-│   │   └── hooks/              # Admin hooks
-│   │       ├── useMembersSupabase.ts
-│   │       ├── useProjectsSupabase.ts
-│   │       └── useSchedulesSupabase.ts
-│   │
-│   ├── modules/                # Feature modules
-│   │   ├── admin/              # Admin panel
-│   │   │   ├── AdminView.tsx
-│   │   │   └── components/
-│   │   ├── home/               # Beranda
-│   │   │   ├── HomeView.tsx
-│   │   │   └── components/
-│   │   ├── members/            # Anggota
-│   │   │   ├── MembersView.tsx
-│   │   │   ├── components/
-│   │   │   └── hooks/
-│   │   ├── projects/           # Proyek
-│   │   │   ├── ProjectsView.tsx
-│   │   │   ├── components/
-│   │   │   └── hooks/
-│   │   ├── schedule/           # Jadwal
-│   │   │   ├── ScheduleView.tsx
-│   │   │   ├── components/
-│   │   │   └── hooks/
-│   │   └── about/              # Tentang
-│   │       └── AboutView.tsx
-│   │
-│   └── shared/                 # Shared components
-│       └── components/
-│           ├── ui/             # Badge, Card, Skeleton, etc.
-│           ├── layout/         # Header, Footer
-│           └── auth/           # ProtectedRoute
-│
-├── .env.example                # Template environment
-├── supabase-setup.sql          # Database schema
-├── ADMIN_SETUP.md              # Panduan admin
-├── package.json
-├── tsconfig.json
-└── next.config.ts
-```
+| Variable | Deskripsi | Contoh |
+|----------|-----------|--------|
+| `NEXT_PUBLIC_SUPABASE_URL` | URL project Supabase | `https://xxx.supabase.co` |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Public API key | `eyJhbGci...` |
+
+**Catatan:** Prefix `NEXT_PUBLIC_` diperlukan agar variabel bisa diakses di browser (client-side).
 
 ---
 
-## 🔐 Admin Panel
+## 📚 Teknologi & Library
 
-### Akses Admin
-1. Klik tombol **Admin** di navbar
-2. Login dengan email dan password yang sudah dibuat di Supabase
-
-### Role-Based Access Control
-Website ini menggunakan sistem role untuk mengatur akses admin panel:
-
-- **Pengurus Kelas (admin)**: Akses penuh ke semua fitur
-  - CRUD Anggota
-  - CRUD Proyek  
-  - CRUD Jadwal
-- **Anggota (member)**: Akses terbatas
-  - CRUD Anggota saja
-
-### Membuat User Admin
-```sql
--- Di Supabase Dashboard > Authentication > Users
--- Klik "Add User" dan isi email + password
-
--- Setelah user dibuat, update user_metadata untuk set role:
-UPDATE auth.users 
-SET raw_user_meta_data = '{"role": "admin"}'  -- atau "member"
-WHERE email = 'user@example.com';
-```
-
-### Fitur Admin
-- ✅ **CRUD Anggota** - Tambah, edit, hapus anggota
-- ✅ **Upload Foto** - Upload foto langsung atau URL (tersimpan di Supabase Storage)
-- ✅ **CRUD Proyek** - Kelola proyek kelas (hanya admin)
-- ✅ **CRUD Jadwal** - Atur jadwal kuliah (hanya admin)
-- ✅ **User Management** - Kelola role user (hanya admin)
-- ✅ **Protected Routes** - Hanya user terautentikasi
-- ✅ **Role-Based Access** - Akses berdasarkan role user
-- ✅ **Row Level Security** - Data aman di Supabase
+| Teknologi | Versi | Fungsi |
+|-----------|-------|--------|
+| Next.js | 16 | Framework React dengan App Router |
+| React | 19 | UI Library |
+| TypeScript | 5 | Static typing |
+| TailwindCSS | 4 | Utility-first CSS |
+| Supabase | 2.x | Backend (Auth, DB, Storage) |
+| Zod | 4.x | Schema validation |
+| Bootstrap Icons | 1.x | Icon library |
 
 ---
 
-## 📊 Database Schema
+## 🎯 Quick Reference
 
-### Members
-| Column | Type | Description |
-|--------|------|-------------|
-| id | UUID | Primary key |
-| name | TEXT | Nama anggota |
-| photo | TEXT | URL foto |
-| description | TEXT | Deskripsi |
-| role | TEXT | Jabatan |
-| is_officer | BOOLEAN | Pengurus? |
-| instagram | TEXT | Link IG |
-| linkedin | TEXT | Link LinkedIn |
+### Menambah Halaman Baru
 
-### Projects
-| Column | Type | Description |
-|--------|------|-------------|
-| id | UUID | Primary key |
-| title | TEXT | Judul proyek |
-| description | TEXT | Deskripsi |
-| status | TEXT | completed/in-progress/planned |
-| technologies | TEXT[] | Tech stack |
-| team_members | TEXT[] | Kontributor |
-| link | TEXT | GitHub URL |
+1. Buat folder di `src/app/nama-halaman/`
+2. Buat `page.tsx` di dalamnya
+3. Buat module di `src/modules/nama-halaman/`
+4. Import view di page.tsx
 
-### Schedules
-| Column | Type | Description |
-|--------|------|-------------|
-| id | UUID | Primary key |
-| day | TEXT | Hari |
-| subject | TEXT | Mata kuliah |
-| time_start | TIME | Jam mulai |
-| time_end | TIME | Jam selesai |
-| room | TEXT | Ruangan |
-| lecturer | TEXT | Dosen |
+### Menambah Custom Hook
 
----
+1. Buat file di `src/lib/hooks/useNamaHook.ts`
+2. Export dari `src/lib/hooks/index.ts`
+3. Import dengan `import { useNamaHook } from "@/lib/hooks"`
 
-## 🛠️ Teknologi
+### Menambah Tabel Database
 
-| Teknologi | Versi | Kegunaan |
-|-----------|-------|----------|
-| [Next.js](https://nextjs.org/) | 16 | React Framework |
-| [React](https://react.dev/) | 19 | UI Library |
-| [TypeScript](https://www.typescriptlang.org/) | 5 | Type Safety |
-| [TailwindCSS](https://tailwindcss.com/) | 4 | Styling |
-| [Supabase](https://supabase.com/) | - | Database & Auth |
-| [Bootstrap Icons](https://icons.getbootstrap.com/) | - | Icons |
-
----
-
-## 🏗️ Arsitektur
-
-Project menggunakan arsitektur **Modular Monolith**:
-
-```
-┌─────────────────────────────────────────────────┐
-│                   Next.js App                    │
-├─────────────────────────────────────────────────┤
-│  ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌───────┐ │
-│  │  Home   │ │ Members │ │Projects │ │Schedule│ │
-│  │ Module  │ │ Module  │ │ Module  │ │ Module │ │
-│  └────┬────┘ └────┬────┘ └────┬────┘ └───┬───┘ │
-│       │           │           │          │      │
-│  ┌────┴───────────┴───────────┴──────────┴───┐ │
-│  │              Shared Components             │ │
-│  │         (UI, Layout, Auth, Hooks)          │ │
-│  └────────────────────┬──────────────────────┘ │
-│                       │                         │
-│  ┌────────────────────┴──────────────────────┐ │
-│  │                 lib/                       │ │
-│  │    (Types, Services, Supabase, Utils)      │ │
-│  └────────────────────┬──────────────────────┘ │
-└───────────────────────┼─────────────────────────┘
-                        │
-                        ▼
-              ┌─────────────────┐
-              │    Supabase     │
-              │  (PostgreSQL)   │
-              └─────────────────┘
-```
+1. Buat tabel di Supabase Dashboard
+2. Tambah type di `src/lib/types.ts`
+3. Buat custom hook di `src/lib/hooks/`
+4. Setup RLS policy di Supabase
 
 ---
 
 ## 👥 Kontributor
 
-Website ini dibuat oleh Tim Web Dev **TPLE013**.
+- TPLE013 - Universitas Pamulang
 
----
+## 📄 License
 
-## 📄 Lisensi
-
-Proyek ini dibuat untuk keperluan internal kelas TPLE013 - Universitas Pamulang.
-
----
-
-<p align="center">
-  Made with ❤️ by TPLE013
-</p>
+MIT License
