@@ -79,8 +79,8 @@ export function UsersAdmin() {
     return (
       <div className="text-center py-12">
         <div className="text-6xl mb-4">🔒</div>
-        <h2 className="text-xl font-semibold text-red-600">Akses Ditolak</h2>
-        <p className="text-slate-600 mt-2">Hanya pengurus kelas yang bisa mengakses menu ini.</p>
+        <h2 className="text-xl font-semibold text-red-600 dark:text-red-400">Akses Ditolak</h2>
+        <p className="text-slate-600 dark:text-slate-400 mt-2">Hanya pengurus kelas yang bisa mengakses menu ini.</p>
       </div>
     );
   }
@@ -89,14 +89,14 @@ export function UsersAdmin() {
     return (
       <div className="flex items-center justify-center py-12">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-        <span className="ml-3 text-slate-600">Memuat data...</span>
+        <span className="ml-3 text-slate-600 dark:text-slate-400">Memuat data...</span>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700">
+      <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg p-4 text-red-700 dark:text-red-400">
         <i className="bi bi-exclamation-triangle mr-2"></i>
         Error: {error}
         <button
@@ -113,8 +113,8 @@ export function UsersAdmin() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-lg font-medium text-slate-900">Kelola User & Role</h2>
-          <p className="text-sm text-slate-500">Atur role untuk setiap user yang terdaftar</p>
+          <h2 className="text-lg font-medium text-slate-900 dark:text-white">Kelola User & Role</h2>
+          <p className="text-sm text-slate-500 dark:text-slate-400">Atur role untuk setiap user yang terdaftar</p>
         </div>
         <Button 
           variant="secondary" 
@@ -127,49 +127,49 @@ export function UsersAdmin() {
       </div>
 
       {profiles.length === 0 ? (
-        <div className="text-center py-8 text-slate-500">
+        <div className="text-center py-8 text-slate-500 dark:text-slate-400">
           Belum ada user terdaftar.
         </div>
       ) : (
-        <div className="bg-white shadow overflow-hidden sm:rounded-lg border">
+        <div className="bg-white dark:bg-slate-800 shadow overflow-hidden sm:rounded-lg border dark:border-slate-700">
           {/* Desktop Table */}
-          <table className="min-w-full divide-y divide-slate-200 hidden md:table">
-            <thead className="bg-slate-50">
+          <table className="min-w-full divide-y divide-slate-200 dark:divide-slate-700 hidden md:table">
+            <thead className="bg-slate-50 dark:bg-slate-700">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">
                   User
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">
                   Role
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">
                   Dibuat
                 </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-slate-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-right text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">
                   Aksi
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-slate-200">
+            <tbody className="bg-white dark:bg-slate-800 divide-y divide-slate-200 dark:divide-slate-700">
               {profiles.map((profile) => (
-                <tr key={profile.id} className="hover:bg-slate-50">
+                <tr key={profile.id} className="hover:bg-slate-50 dark:hover:bg-slate-700">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
-                      <div className="text-sm font-medium text-slate-900">
+                      <div className="text-sm font-medium text-slate-900 dark:text-white">
                         {profile.full_name || profile.email || 'No name'}
                       </div>
                       {profile.full_name && (
-                        <div className="text-sm text-slate-500">{profile.email}</div>
+                        <div className="text-sm text-slate-500 dark:text-slate-400">{profile.email}</div>
                       )}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`inline-flex px-2.5 py-1 text-xs font-semibold rounded-full ${
                       profile.role === 'admin'
-                        ? 'bg-purple-100 text-purple-800'
+                        ? 'bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-300'
                         : profile.role === 'member'
-                        ? 'bg-blue-100 text-blue-800'
-                        : 'bg-slate-100 text-slate-600'
+                        ? 'bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300'
+                        : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-400'
                     }`}>
                       {profile.role === 'admin' 
                         ? '👑 Pengurus Kelas' 
@@ -178,7 +178,7 @@ export function UsersAdmin() {
                         : '❓ Belum Diset'}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">
                     {new Date(profile.created_at).toLocaleDateString('id-ID', {
                       day: 'numeric',
                       month: 'short',
@@ -209,18 +209,18 @@ export function UsersAdmin() {
           </table>
 
           {/* Mobile Cards */}
-          <div className="md:hidden divide-y divide-slate-200">
+          <div className="md:hidden divide-y divide-slate-200 dark:divide-slate-700">
             {profiles.map((profile) => (
               <div key={profile.id} className="p-4">
                 <div className="flex items-start justify-between mb-3">
                   <div>
-                    <div className="font-medium text-slate-900">
+                    <div className="font-medium text-slate-900 dark:text-white">
                       {profile.full_name || profile.email || 'No name'}
                     </div>
                     {profile.full_name && (
-                      <div className="text-sm text-slate-500">{profile.email}</div>
+                      <div className="text-sm text-slate-500 dark:text-slate-400">{profile.email}</div>
                     )}
-                    <div className="text-xs text-slate-400 mt-1">
+                    <div className="text-xs text-slate-400 dark:text-slate-500 mt-1">
                       {new Date(profile.created_at).toLocaleDateString('id-ID', {
                         day: 'numeric',
                         month: 'short',
@@ -230,10 +230,10 @@ export function UsersAdmin() {
                   </div>
                   <span className={`inline-flex px-2.5 py-1 text-xs font-semibold rounded-full ${
                     profile.role === 'admin'
-                      ? 'bg-purple-100 text-purple-800'
+                      ? 'bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-300'
                       : profile.role === 'member'
-                      ? 'bg-blue-100 text-blue-800'
-                      : 'bg-slate-100 text-slate-600'
+                      ? 'bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300'
+                      : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-400'
                   }`}>
                     {profile.role === 'admin' 
                       ? '👑 Pengurus' 
@@ -265,12 +265,12 @@ export function UsersAdmin() {
       )}
 
       {/* Info Box */}
-      <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
-        <h3 className="font-medium text-amber-800 mb-2">
+      <div className="bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
+        <h3 className="font-medium text-amber-800 dark:text-amber-300 mb-2">
           <i className="bi bi-info-circle mr-2"></i>
           Tentang Role
         </h3>
-        <ul className="text-sm text-amber-700 space-y-1">
+        <ul className="text-sm text-amber-700 dark:text-amber-400 space-y-1">
           <li><strong>Pengurus Kelas (admin):</strong> Akses penuh - kelola anggota, proyek, jadwal, dan users</li>
           <li><strong>Anggota (member):</strong> Akses terbatas - hanya bisa kelola data anggota</li>
         </ul>

@@ -32,26 +32,26 @@ function AdminContent() {
   const roleLabel = role === 'admin' ? 'Pengurus Kelas' : 'Anggota';
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+      <div className="bg-white dark:bg-slate-800 shadow-sm border-b dark:border-slate-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex justify-between items-start">
             <div>
-              <h1 className="text-2xl font-bold text-slate-900">
+              <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
                 <i className="bi bi-gear-fill mr-2"></i>
                 Admin Panel
               </h1>
-              <p className="text-slate-500 mt-1">Kelola data anggota, proyek, dan jadwal</p>
+              <p className="text-slate-500 dark:text-slate-400 mt-1">Kelola data anggota, proyek, dan jadwal</p>
             </div>
             <div className="flex items-center gap-4">
               <div className="text-right">
-                <p className="text-sm font-medium text-slate-900">{displayName}</p>
-                <p className="text-xs text-slate-500">{roleLabel}</p>
+                <p className="text-sm font-medium text-slate-900 dark:text-white">{displayName}</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">{roleLabel}</p>
               </div>
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                className="flex items-center gap-2 px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
               >
                 <i className="bi bi-box-arrow-right"></i>
                 Keluar
@@ -62,7 +62,7 @@ function AdminContent() {
       </div>
 
       {/* Tabs */}
-      <div className="bg-white border-b">
+      <div className="bg-white dark:bg-slate-800 border-b dark:border-slate-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <nav className="flex space-x-8">
             {tabs.map((tab) => (
@@ -71,8 +71,8 @@ function AdminContent() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
                   activeTab === tab.id
-                    ? "border-blue-600 text-blue-600"
-                    : "border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300"
+                    ? "border-blue-600 text-blue-600 dark:text-blue-400"
+                    : "border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 hover:border-slate-300 dark:hover:border-slate-600"
                 }`}
               >
                 <i className={`bi ${tab.icon} mr-2`}></i>

@@ -34,12 +34,12 @@ export function ScheduleGrid({
   // Empty state
   if (sortedDays.length === 0) {
     return (
-      <div className="text-center py-24 bg-white rounded-3xl border-2 border-dashed border-slate-200">
-        <div className="bg-slate-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
-          <i className={`bi ${emptyIcon} text-4xl text-slate-300`}></i>
+      <div className="text-center py-24 bg-white dark:bg-slate-800 rounded-3xl border-2 border-dashed border-slate-200 dark:border-slate-700">
+        <div className="bg-slate-50 dark:bg-slate-700 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+          <i className={`bi ${emptyIcon} text-4xl text-slate-300 dark:text-slate-500`}></i>
         </div>
-        <h3 className="text-lg font-semibold text-slate-900">{emptyTitle}</h3>
-        <p className="text-slate-500 mt-2">{emptyMessage}</p>
+        <h3 className="text-lg font-semibold text-slate-900 dark:text-white">{emptyTitle}</h3>
+        <p className="text-slate-500 dark:text-slate-400 mt-2">{emptyMessage}</p>
       </div>
     );
   }

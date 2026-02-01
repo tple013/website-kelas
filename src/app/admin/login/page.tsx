@@ -49,29 +49,29 @@ export default function AdminLoginPage() {
   // Don't show login form if already authenticated
   if (isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-900 dark:to-slate-800 px-4">
       <div className="max-w-md w-full">
         {/* Logo/Header */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-xl mb-4">
             <i className="bi bi-shield-lock text-white text-2xl"></i>
           </div>
-          <h1 className="text-2xl font-bold text-slate-900">Admin Login</h1>
-          <p className="text-slate-500 mt-1">Masuk untuk mengelola website kelas</p>
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Admin Login</h1>
+          <p className="text-slate-500 dark:text-slate-400 mt-1">Masuk untuk mengelola website kelas</p>
         </div>
 
         {/* Login Form */}
-        <div className="bg-white rounded-2xl shadow-xl p-8">
+        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-8">
           <form onSubmit={handleSubmit} className="space-y-5">
             {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+              <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg text-sm">
                 <i className="bi bi-exclamation-circle mr-2"></i>
                 {error}
               </div>
@@ -108,8 +108,8 @@ export default function AdminLoginPage() {
         </div>
 
         {/* Footer */}
-        <p className="text-center text-sm text-slate-500 mt-6">
-          <Link href="/" className="hover:text-blue-600 transition-colors">
+        <p className="text-center text-sm text-slate-500 dark:text-slate-400 mt-6">
+          <Link href="/" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
             <i className="bi bi-arrow-left mr-1"></i>
             Kembali ke Website
           </Link>

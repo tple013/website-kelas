@@ -134,27 +134,27 @@ export function ProjectsAdmin() {
   ];
 
   const statusColors: Record<string, string> = {
-    "in-progress": "bg-blue-100 text-blue-700",
-    completed: "bg-green-100 text-green-700",
-    planned: "bg-yellow-100 text-yellow-700",
-    cancelled: "bg-red-100 text-red-700",
+    "in-progress": "bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-400",
+    completed: "bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-400",
+    planned: "bg-yellow-100 dark:bg-yellow-900/50 text-yellow-700 dark:text-yellow-400",
+    cancelled: "bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-400",
   };
 
-  const getStatusStyle = (status: string) => statusColors[status] || "bg-slate-100 text-slate-600";
+  const getStatusStyle = (status: string) => statusColors[status] || "bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-400";
   const getStatusLabel = (status: string) => statusOptions.find(s => s.value === status)?.label || status;
 
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-        <span className="ml-3 text-slate-600">Memuat data...</span>
+        <span className="ml-3 text-slate-600 dark:text-slate-400">Memuat data...</span>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700">
+      <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg p-4 text-red-700 dark:text-red-400">
         <i className="bi bi-exclamation-triangle mr-2"></i>
         Error: {error}
       </div>
@@ -166,8 +166,8 @@ export function ProjectsAdmin() {
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h2 className="text-lg font-semibold text-slate-900">Daftar Proyek</h2>
-          <p className="text-sm text-slate-500">{projects.length} proyek terdaftar</p>
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Daftar Proyek</h2>
+          <p className="text-sm text-slate-500 dark:text-slate-400">{projects.length} proyek terdaftar</p>
         </div>
         <Button onClick={() => setIsFormOpen(true)} icon={<i className="bi bi-plus-lg" />}>
           Tambah Proyek
@@ -176,7 +176,7 @@ export function ProjectsAdmin() {
 
       {/* Error Alert */}
       {(formErrors.delete || formErrors.submit) && (
-        <div className="mb-4 bg-red-50 border border-red-200 rounded-lg p-3 text-red-700 text-sm">
+        <div className="mb-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg p-3 text-red-700 dark:text-red-400 text-sm">
           <i className="bi bi-exclamation-triangle mr-2" />
           {formErrors.delete || formErrors.submit}
         </div>
@@ -287,56 +287,56 @@ export function ProjectsAdmin() {
       {/* Cards Grid */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {projects.map((project) => (
-          <div key={project.id} className="bg-white rounded-xl shadow-sm border p-4">
+          <div key={project.id} className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border dark:border-slate-700 p-4">
             <div className="flex justify-between items-start mb-3">
-              <h3 className="font-semibold text-slate-900">{project.title}</h3>
+              <h3 className="font-semibold text-slate-900 dark:text-white">{project.title}</h3>
               <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusStyle(project.status)}`}>
                 {getStatusLabel(project.status)}
               </span>
             </div>
             {project.description && (
-              <p className="text-sm text-slate-500 mb-3 line-clamp-2">{project.description}</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mb-3 line-clamp-2">{project.description}</p>
             )}
             {project.technologies && project.technologies.length > 0 && (
               <div className="mb-2">
-                <p className="text-xs text-slate-400 mb-1">Teknologi:</p>
+                <p className="text-xs text-slate-400 dark:text-slate-500 mb-1">Teknologi:</p>
                 <div className="flex flex-wrap gap-1">
                   {project.technologies.slice(0, 3).map((tech, i) => (
-                    <span key={i} className="text-xs bg-blue-100 text-blue-600 px-2 py-0.5 rounded">
+                    <span key={i} className="text-xs bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 px-2 py-0.5 rounded">
                       {tech}
                     </span>
                   ))}
                   {project.technologies.length > 3 && (
-                    <span className="text-xs text-slate-400">+{project.technologies.length - 3}</span>
+                    <span className="text-xs text-slate-400 dark:text-slate-500">+{project.technologies.length - 3}</span>
                   )}
                 </div>
               </div>
             )}
             {project.features && project.features.length > 0 && (
               <div className="mb-3">
-                <p className="text-xs text-slate-400 mb-1">Fitur:</p>
+                <p className="text-xs text-slate-400 dark:text-slate-500 mb-1">Fitur:</p>
                 <div className="flex flex-wrap gap-1">
                   {project.features.slice(0, 3).map((feature, i) => (
-                    <span key={i} className="text-xs bg-green-100 text-green-600 px-2 py-0.5 rounded">
+                    <span key={i} className="text-xs bg-green-100 dark:bg-green-900/50 text-green-600 dark:text-green-400 px-2 py-0.5 rounded">
                       {feature}
                     </span>
                   ))}
                   {project.features.length > 3 && (
-                    <span className="text-xs text-slate-400">+{project.features.length - 3}</span>
+                    <span className="text-xs text-slate-400 dark:text-slate-500">+{project.features.length - 3}</span>
                   )}
                 </div>
               </div>
             )}
-            <div className="flex justify-end gap-2 pt-2 border-t">
+            <div className="flex justify-end gap-2 pt-2 border-t dark:border-slate-700">
               <button
                 onClick={() => handleEdit(project)}
-                className="text-sm text-blue-600 hover:text-blue-800"
+                className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
               >
                 <i className="bi bi-pencil mr-1"></i>Edit
               </button>
               <button
                 onClick={() => handleDelete(project.id, project.title)}
-                className="text-sm text-red-600 hover:text-red-800"
+                className="text-sm text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300"
               >
                 <i className="bi bi-trash mr-1"></i>Hapus
               </button>
@@ -344,7 +344,7 @@ export function ProjectsAdmin() {
           </div>
         ))}
         {projects.length === 0 && (
-          <div className="col-span-full text-center py-12 text-slate-500">
+          <div className="col-span-full text-center py-12 text-slate-500 dark:text-slate-400">
             Belum ada proyek. Klik &ldquo;Tambah Proyek&rdquo; untuk memulai.
           </div>
         )}

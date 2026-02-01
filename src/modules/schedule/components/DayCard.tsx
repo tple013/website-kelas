@@ -12,15 +12,15 @@ export function DayCard({ day, items }: DayCardProps) {
   return (
     <Card className="flex flex-col overflow-hidden group/card" hover={true}>
       {/* Header */}
-      <div className="bg-slate-900 p-5 flex justify-between items-center text-white border-b border-slate-800">
+      <div className="bg-slate-900 dark:bg-slate-950 p-5 flex justify-between items-center text-white border-b border-slate-800 dark:border-slate-700">
         <h2 className="text-xl font-bold tracking-wide">{day}</h2>
-        <div className="bg-slate-800 p-2 rounded-lg">
+        <div className="bg-slate-800 dark:bg-slate-800 p-2 rounded-lg">
           <i className="bi bi-calendar-event text-blue-400"></i>
         </div>
       </div>
 
       {/* Timeline */}
-      <div className="p-6">
+      <div className="p-6 bg-white dark:bg-slate-800">
         <div className="space-y-0">
           {sortedItems.map((item, index) => (
             <div key={item.id} className="relative pl-8 pb-8 last:pb-0">

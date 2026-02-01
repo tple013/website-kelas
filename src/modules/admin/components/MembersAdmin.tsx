@@ -145,14 +145,14 @@ export function MembersAdmin() {
     return (
       <div className="flex items-center justify-center py-12">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-        <span className="ml-3 text-slate-600">Memuat data...</span>
+        <span className="ml-3 text-slate-600 dark:text-slate-400">Memuat data...</span>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700">
+      <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg p-4 text-red-700 dark:text-red-400">
         <i className="bi bi-exclamation-triangle mr-2"></i>
         Error: {error}
       </div>
@@ -164,8 +164,8 @@ export function MembersAdmin() {
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h2 className="text-lg font-semibold text-slate-900">Daftar Anggota</h2>
-          <p className="text-sm text-slate-500">{members.length} anggota terdaftar</p>
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Daftar Anggota</h2>
+          <p className="text-sm text-slate-500 dark:text-slate-400">{members.length} anggota terdaftar</p>
         </div>
         <Button onClick={() => setIsFormOpen(true)} icon={<i className="bi bi-plus-lg" />}>
           Tambah Anggota
@@ -180,7 +180,7 @@ export function MembersAdmin() {
       >
         <form onSubmit={handleSubmit} className="space-y-4">
           {formError && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+            <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg text-sm">
               <i className="bi bi-exclamation-circle mr-2"></i>
               {formError}
             </div>
@@ -195,7 +195,7 @@ export function MembersAdmin() {
           />
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Foto</label>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Foto</label>
             <div className="space-y-3">
               {photoPreview && (
                 <div className="flex items-center gap-3">
@@ -204,9 +204,9 @@ export function MembersAdmin() {
                     alt="Preview"
                     width={64}
                     height={64}
-                    className="w-16 h-16 rounded-full object-cover border"
+                    className="w-16 h-16 rounded-full object-cover border dark:border-slate-600"
                   />
-                  <div className="text-sm text-slate-600">
+                  <div className="text-sm text-slate-600 dark:text-slate-400">
                     {selectedFile ? selectedFile.name : "Foto saat ini"}
                   </div>
                 </div>
@@ -278,39 +278,39 @@ export function MembersAdmin() {
       </Modal>
 
       {/* Table Desktop / Cards Mobile */}
-      <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
+      <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border dark:border-slate-700 overflow-hidden">
         {/* Desktop Table */}
         <table className="w-full hidden md:table">
-          <thead className="bg-slate-50 border-b">
+          <thead className="bg-slate-50 dark:bg-slate-900/50 border-b dark:border-slate-700">
             <tr>
-              <th className="text-left px-4 py-3 text-sm font-medium text-slate-600">Nama</th>
-              <th className="text-left px-4 py-3 text-sm font-medium text-slate-600">Jabatan</th>
-              <th className="text-left px-4 py-3 text-sm font-medium text-slate-600">Status</th>
-              <th className="text-right px-4 py-3 text-sm font-medium text-slate-600">Aksi</th>
+              <th className="text-left px-4 py-3 text-sm font-medium text-slate-600 dark:text-slate-400">Nama</th>
+              <th className="text-left px-4 py-3 text-sm font-medium text-slate-600 dark:text-slate-400">Jabatan</th>
+              <th className="text-left px-4 py-3 text-sm font-medium text-slate-600 dark:text-slate-400">Status</th>
+              <th className="text-right px-4 py-3 text-sm font-medium text-slate-600 dark:text-slate-400">Aksi</th>
             </tr>
           </thead>
-          <tbody className="divide-y">
+          <tbody className="divide-y dark:divide-slate-700">
             {members.map((member) => (
-              <tr key={member.id} className="hover:bg-slate-50">
+              <tr key={member.id} className="hover:bg-slate-50 dark:hover:bg-slate-700/50">
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-medium text-sm">
+                    <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center text-blue-600 dark:text-blue-400 font-medium text-sm">
                       {member.name.charAt(0)}
                     </div>
                     <div>
-                      <div className="font-medium text-slate-900">{member.name}</div>
+                      <div className="font-medium text-slate-900 dark:text-white">{member.name}</div>
                       {member.description && (
-                        <div className="text-xs text-slate-500 truncate max-w-[200px]">{member.description}</div>
+                        <div className="text-xs text-slate-500 dark:text-slate-400 truncate max-w-[200px]">{member.description}</div>
                       )}
                     </div>
                   </div>
                 </td>
-                <td className="px-4 py-3 text-sm text-slate-600">{member.role || "-"}</td>
+                <td className="px-4 py-3 text-sm text-slate-600 dark:text-slate-400">{member.role || "-"}</td>
                 <td className="px-4 py-3">
                   <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
                     member.is_officer 
-                      ? "bg-blue-100 text-blue-700" 
-                      : "bg-slate-100 text-slate-600"
+                      ? "bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-400" 
+                      : "bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-400"
                   }`}>
                     {member.is_officer ? "Pengurus" : "Anggota"}
                   </span>
@@ -318,14 +318,14 @@ export function MembersAdmin() {
                 <td className="px-4 py-3 text-right">
                   <button
                     onClick={() => handleEdit(member)}
-                    className="text-blue-600 hover:text-blue-800 mr-3"
+                    className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 mr-3"
                     title="Edit"
                   >
                     <i className="bi bi-pencil"></i>
                   </button>
                   <button
                     onClick={() => handleDelete(member.id, member.name)}
-                    className="text-red-600 hover:text-red-800"
+                    className="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300"
                     title="Hapus"
                   >
                     <i className="bi bi-trash"></i>
@@ -335,7 +335,7 @@ export function MembersAdmin() {
             ))}
             {members.length === 0 && (
               <tr>
-                <td colSpan={4} className="px-4 py-8 text-center text-slate-500">
+                <td colSpan={4} className="px-4 py-8 text-center text-slate-500 dark:text-slate-400">
                   Belum ada anggota. Klik &ldquo;Tambah Anggota&rdquo; untuk memulai.
                 </td>
               </tr>
@@ -344,40 +344,40 @@ export function MembersAdmin() {
         </table>
 
         {/* Mobile Cards */}
-        <div className="md:hidden divide-y">
+        <div className="md:hidden divide-y dark:divide-slate-700">
           {members.map((member) => (
             <div key={member.id} className="p-4">
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-medium">
+                  <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center text-blue-600 dark:text-blue-400 font-medium">
                     {member.name.charAt(0)}
                   </div>
                   <div>
-                    <div className="font-medium text-slate-900">{member.name}</div>
-                    <div className="text-sm text-slate-500">{member.role || "Anggota"}</div>
+                    <div className="font-medium text-slate-900 dark:text-white">{member.name}</div>
+                    <div className="text-sm text-slate-500 dark:text-slate-400">{member.role || "Anggota"}</div>
                   </div>
                 </div>
                 <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
                   member.is_officer 
-                    ? "bg-blue-100 text-blue-700" 
-                    : "bg-slate-100 text-slate-600"
+                    ? "bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-400" 
+                    : "bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-400"
                 }`}>
                   {member.is_officer ? "Pengurus" : "Anggota"}
                 </span>
               </div>
               {member.description && (
-                <p className="text-sm text-slate-500 mt-2 line-clamp-2">{member.description}</p>
+                <p className="text-sm text-slate-500 dark:text-slate-400 mt-2 line-clamp-2">{member.description}</p>
               )}
-              <div className="flex justify-end gap-4 mt-3 pt-3 border-t">
+              <div className="flex justify-end gap-4 mt-3 pt-3 border-t dark:border-slate-700">
                 <button
                   onClick={() => handleEdit(member)}
-                  className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1"
+                  className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 flex items-center gap-1"
                 >
                   <i className="bi bi-pencil"></i> Edit
                 </button>
                 <button
                   onClick={() => handleDelete(member.id, member.name)}
-                  className="text-sm text-red-600 hover:text-red-800 flex items-center gap-1"
+                  className="text-sm text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 flex items-center gap-1"
                 >
                   <i className="bi bi-trash"></i> Hapus
                 </button>
@@ -385,7 +385,7 @@ export function MembersAdmin() {
             </div>
           ))}
           {members.length === 0 && (
-            <div className="p-8 text-center text-slate-500">
+            <div className="p-8 text-center text-slate-500 dark:text-slate-400">
               Belum ada anggota. Klik &ldquo;Tambah Anggota&rdquo; untuk memulai.
             </div>
           )}
