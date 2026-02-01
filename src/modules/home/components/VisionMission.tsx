@@ -5,32 +5,32 @@ export function VisionMission() {
         {/* Left Column */}
         <div className="space-y-8">
           <div>
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Visi & Misi Kami</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4">Visi & Misi Kami</h2>
             <div className="h-1.5 w-20 bg-blue-600 rounded-full"></div>
           </div>
 
           {/* Visi Card */}
-          <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+          <div className="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-md transition-shadow">
             <div className="flex items-center space-x-3 mb-4">
-              <div className="p-2 bg-blue-100 rounded-lg text-blue-700">
+              <div className="p-2 bg-blue-100 dark:bg-blue-900/50 rounded-lg text-blue-700 dark:text-blue-400">
                 <i className="bi bi-eye text-xl"></i>
               </div>
-              <h3 className="text-xl font-bold text-slate-800">Visi</h3>
+              <h3 className="text-xl font-bold text-slate-800 dark:text-white">Visi</h3>
             </div>
-            <p className="text-slate-600 leading-relaxed">
+            <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
               Menjadi pusat unggulan pendidikan teknologi yang menghasilkan talenta digital berkualitas tinggi, adaptif, dan berkarakter untuk kemajuan bangsa.
             </p>
           </div>
 
           {/* Misi Card */}
-          <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+          <div className="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-md transition-shadow">
             <div className="flex items-center space-x-3 mb-4">
-              <div className="p-2 bg-sky-100 rounded-lg text-sky-700">
+              <div className="p-2 bg-sky-100 dark:bg-sky-900/50 rounded-lg text-sky-700 dark:text-sky-400">
                 <i className="bi bi-bullseye text-xl"></i>
               </div>
-              <h3 className="text-xl font-bold text-slate-800">Misi</h3>
+              <h3 className="text-xl font-bold text-slate-800 dark:text-white">Misi</h3>
             </div>
-            <ul className="space-y-3 text-slate-600">
+            <ul className="space-y-3 text-slate-600 dark:text-slate-400">
               <li className="flex items-start">
                 <i className="bi bi-check-circle-fill text-blue-500 mt-1 mr-3 text-sm"></i>
                 <span>Mengembangkan kompetensi teknis yang relevan dengan industri.</span>

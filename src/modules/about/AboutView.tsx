@@ -10,19 +10,19 @@ const values = [
 
 export function AboutView() {
   return (
-    <div className="bg-slate-50 min-h-screen">
+    <div className="bg-slate-50 dark:bg-slate-900 min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 space-y-20">
         {/* Introduction */}
         <section className="text-center max-w-4xl mx-auto">
           <Badge variant="info" className="mb-4 uppercase tracking-wide">Profil Kelas</Badge>
-          <h1 className="text-4xl md:text-5xl font-bold text-blue-900 mb-6 leading-tight">
+          <h1 className="text-4xl md:text-5xl font-bold text-blue-900 dark:text-blue-400 mb-6 leading-tight">
             Mengenal Lebih Dekat <span className="text-blue-600">TPLE013</span>
           </h1>
-          <p className="text-xl text-slate-600 mb-6 leading-relaxed">
+          <p className="text-xl text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
             TPLE013 bukan sekadar kelas, melainkan inkubator bagi talenta digital masa depan yang berkomitmen pada inovasi dan kompetensi.
           </p>
           <div className="h-1 w-24 bg-blue-600 mx-auto rounded-full"></div>
-          <p className="mt-6 text-lg text-slate-500 leading-relaxed">
+          <p className="mt-6 text-lg text-slate-500 dark:text-slate-400 leading-relaxed">
             Melalui proyek kolaboratif dan kurikulum yang relevan dengan industri (Web Dev, Mobile Apps, Cybersecurity), kami mempersiapkan setiap anggota untuk bersaing di era digital global.
           </p>
         </section>

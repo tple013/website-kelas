@@ -33,13 +33,13 @@ export function MemberCard({ member }: MemberCardProps) {
             unoptimized
           />
         </div>
-        <h3 className="text-sm font-semibold text-slate-800 line-clamp-2 min-h-[40px]">{member.name}</h3>
+        <h3 className="text-sm font-semibold text-slate-800 dark:text-white line-clamp-2 min-h-[40px]">{member.name}</h3>
         {member.description && (
           <div className="mt-2">
             <ExpandableText 
               text={member.description} 
               maxLines={2} 
-              className="text-xs text-slate-500"
+              className="text-xs text-slate-500 dark:text-slate-400"
               title={member.name}
             />
           </div>
@@ -47,17 +47,17 @@ export function MemberCard({ member }: MemberCardProps) {
       </CardBody>
       <CardFooter className="flex justify-center space-x-3 py-2">
         {member.instagram && (
-          <a href={member.instagram} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-pink-600 transition-colors">
+          <a href={member.instagram} target="_blank" rel="noopener noreferrer" className="text-slate-400 dark:text-slate-500 hover:text-pink-600 transition-colors">
             <i className="bi bi-instagram"></i>
           </a>
         )}
         {member.linkedin && (
-          <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-blue-700 transition-colors">
+          <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="text-slate-400 dark:text-slate-500 hover:text-blue-700 transition-colors">
             <i className="bi bi-linkedin"></i>
           </a>
         )}
         {!member.instagram && !member.linkedin && (
-          <span className="text-slate-300 text-xs">No social links</span>
+          <span className="text-slate-300 dark:text-slate-600 text-xs">No social links</span>
         )}
       </CardFooter>
     </Card>

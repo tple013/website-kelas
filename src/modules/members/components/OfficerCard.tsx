@@ -33,25 +33,25 @@ export function OfficerCard({ officer }: OfficerCardProps) {
             unoptimized
           />
         </div>
-        <h3 className="text-xl font-bold text-slate-900 mb-1">{officer.name}</h3>
+        <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-1">{officer.name}</h3>
         <Badge variant="info" className="mb-4">{officer.role}</Badge>
-        <p className="text-slate-500 text-sm leading-relaxed">
+        <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
           {officer.description || "Bertanggung jawab dalam mengelola kegiatan kelas."}
         </p>
       </CardBody>
       <CardFooter className="flex justify-center space-x-4 py-3">
         {officer.instagram && (
-          <a href={officer.instagram} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-blue-600 transition-colors transform hover:scale-110">
+          <a href={officer.instagram} target="_blank" rel="noopener noreferrer" className="text-slate-400 dark:text-slate-500 hover:text-blue-600 transition-colors transform hover:scale-110">
             <i className="bi bi-instagram text-lg"></i>
           </a>
         )}
         {officer.linkedin && (
-          <a href={officer.linkedin} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-blue-800 transition-colors transform hover:scale-110">
+          <a href={officer.linkedin} target="_blank" rel="noopener noreferrer" className="text-slate-400 dark:text-slate-500 hover:text-blue-800 transition-colors transform hover:scale-110">
             <i className="bi bi-linkedin text-lg"></i>
           </a>
         )}
         {!officer.instagram && !officer.linkedin && (
-          <span className="text-slate-300 text-xs">No social links</span>
+          <span className="text-slate-300 dark:text-slate-600 text-xs">No social links</span>
         )}
       </CardFooter>
     </Card>

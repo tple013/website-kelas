@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import { ThemeToggle } from '@/shared/components/ui';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -27,8 +28,8 @@ export default function Header() {
   return (
     <header className={`sticky top-0 z-50 transition-all duration-300 ${
       isScrolled 
-        ? 'bg-white/60 backdrop-blur-xl border-b border-slate-200/50 shadow-sm' 
-        : 'bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm'
+        ? 'bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl border-b border-slate-200/50 dark:border-slate-700/50 shadow-sm' 
+        : 'bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-700 shadow-sm'
     }`}>
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
@@ -38,7 +39,7 @@ export default function Header() {
             <div className="bg-blue-600 p-2 rounded-lg group-hover:bg-blue-700 transition-all duration-300">
               <i className="bi bi-code-slash text-white text-xl"></i>
             </div>
-            <Link href="/" className="text-xl font-bold text-slate-900 tracking-wider hover:text-blue-600 transition-colors">
+            <Link href="/" className="text-xl font-bold text-slate-900 dark:text-white tracking-wider hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
               TPLE<span className="text-blue-500">013</span>
             </Link>
           </div>
@@ -49,15 +50,16 @@ export default function Header() {
               <Link 
                 key={item.href}
                 href={item.href} 
-                className="text-sm font-medium text-slate-700 hover:text-blue-600 transition-colors duration-200 tracking-wide relative group"
+                className="text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 tracking-wide relative group"
               >
                 {item.label}
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-500 transition-all duration-300 group-hover:w-full"></span>
               </Link>
             ))}
             
-            <div className="pl-6 border-l border-slate-300 flex items-center gap-3">
-              <Link href="/admin" className="text-sm font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 px-4 py-2.5 rounded-full transition-all flex items-center gap-2">
+            <div className="pl-6 border-l border-slate-300 dark:border-slate-600 flex items-center gap-3">
+              <ThemeToggle />
+              <Link href="/admin" className="text-sm font-semibold text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/50 hover:bg-blue-100 dark:hover:bg-blue-900 px-4 py-2.5 rounded-full transition-all flex items-center gap-2">
                 <i className="bi bi-shield-lock"></i>
                 Admin
               </Link>
@@ -68,10 +70,11 @@ export default function Header() {
           </div>
 
           {/* MOBILE TOGGLE */}
-          <div className="md:hidden">
+          <div className="md:hidden flex items-center gap-2">
+            <ThemeToggle />
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-slate-700 hover:text-blue-600 hover:bg-slate-100 p-2 rounded-md transition-colors"
+              className="text-slate-700 dark:text-slate-300 hover:text-blue-600 hover:bg-slate-100 dark:hover:bg-slate-800 p-2 rounded-md transition-colors"
               aria-label="Toggle menu"
             >
               <i className={`bi ${isMenuOpen ? 'bi-x-lg' : 'bi-list'} text-2xl`}></i>

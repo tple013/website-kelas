@@ -6,3 +6,4 @@ export { ExpandableText } from "./ExpandableText";
 export { Input, Textarea, FileInput, Select, Checkbox } from "./Input";
 export { Modal } from "./Modal";
 export { Skeleton, SkeletonCard } from "./Skeleton";
+export { ThemeToggle } from "./ThemeToggle";

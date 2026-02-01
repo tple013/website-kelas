@@ -36,7 +36,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
       <CardBody className="flex-grow p-4 md:p-8">
         {/* Title & Status */}
         <div className="flex justify-between items-start mb-3 md:mb-6 gap-2">
-          <h2 className="text-lg md:text-2xl font-bold text-slate-800 group-hover:text-blue-600 transition-colors leading-tight">
+          <h2 className="text-lg md:text-2xl font-bold text-slate-800 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-tight">
             {project.title}
           </h2>
           <Badge variant={status.variant} className="flex-shrink-0 text-xs">
@@ -49,25 +49,25 @@ export function ProjectCard({ project }: ProjectCardProps) {
           <ExpandableText 
             text={project.description} 
             maxLines={2} 
-            className="text-sm md:text-base text-slate-600 leading-relaxed"
+            className="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed"
             title={project.title}
           />
         </div>
 
         {/* Tech Stack */}
         <div className="mb-3 md:mb-6">
-          <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Teknologi</h3>
+          <h3 className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">Teknologi</h3>
           <div className="flex flex-wrap gap-1 md:gap-2">
             {project.technologies.slice(0, 4).map((tech) => (
               <span
                 key={tech}
-                className="bg-blue-50 text-blue-600 border border-blue-200 px-2 py-0.5 md:px-3 md:py-1 rounded-md text-xs font-medium"
+                className="bg-blue-50 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 px-2 py-0.5 md:px-3 md:py-1 rounded-md text-xs font-medium"
               >
                 {tech}
               </span>
             ))}
             {project.technologies.length > 4 && (
-              <span className="text-xs text-slate-400">+{project.technologies.length - 4}</span>
+              <span className="text-xs text-slate-400 dark:text-slate-500">+{project.technologies.length - 4}</span>
             )}
           </div>
         </div>
@@ -75,12 +75,12 @@ export function ProjectCard({ project }: ProjectCardProps) {
         {/* Features - Hidden on mobile, show on desktop */}
         {project.features.length > 0 && (
           <div className="hidden md:block mb-6">
-            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Fitur</h3>
+            <h3 className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-3">Fitur</h3>
             <div className="flex flex-wrap gap-2">
               {project.features.map((feature) => (
                 <span
                   key={feature}
-                  className="bg-green-50 text-green-600 border border-green-200 px-3 py-1 rounded-md text-xs font-medium hover:bg-green-100 transition-colors"
+                  className="bg-green-50 dark:bg-green-900/50 text-green-600 dark:text-green-400 border border-green-200 dark:border-green-800 px-3 py-1 rounded-md text-xs font-medium hover:bg-green-100 dark:hover:bg-green-900 transition-colors"
                 >
                   {feature}
                 </span>
@@ -91,24 +91,24 @@ export function ProjectCard({ project }: ProjectCardProps) {
 
         {/* Team - Simplified on mobile */}
         <div>
-          <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Kontributor</h3>
+          <h3 className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">Kontributor</h3>
           <div className="flex items-center -space-x-2 overflow-hidden">
             {project.teamMembers.slice(0, 3).map((member, idx) => (
               <div
                 key={idx}
-                className="inline-flex h-6 w-6 md:h-8 md:w-8 rounded-full ring-2 ring-white bg-slate-200 items-center justify-center text-xs text-slate-500 font-bold"
+                className="inline-flex h-6 w-6 md:h-8 md:w-8 rounded-full ring-2 ring-white dark:ring-slate-800 bg-slate-200 dark:bg-slate-600 items-center justify-center text-xs text-slate-500 dark:text-slate-300 font-bold"
                 title={member}
               >
                 {member.charAt(0)}
               </div>
             ))}
             {project.teamMembers.length > 3 && (
-              <div className="inline-flex h-6 w-6 md:h-8 md:w-8 rounded-full ring-2 ring-white bg-slate-100 items-center justify-center text-xs text-slate-500 font-medium">
+              <div className="inline-flex h-6 w-6 md:h-8 md:w-8 rounded-full ring-2 ring-white dark:ring-slate-800 bg-slate-100 dark:bg-slate-700 items-center justify-center text-xs text-slate-500 dark:text-slate-400 font-medium">
                 +{project.teamMembers.length - 3}
               </div>
             )}
           </div>
-          <p className="text-xs text-slate-400 mt-1 line-clamp-1">{project.teamMembers.slice(0, 3).join(", ")}{project.teamMembers.length > 3 ? '...' : ''}</p>
+          <p className="text-xs text-slate-400 dark:text-slate-500 mt-1 line-clamp-1">{project.teamMembers.slice(0, 3).join(", ")}{project.teamMembers.length > 3 ? '...' : ''}</p>
         </div>
       </CardBody>
 

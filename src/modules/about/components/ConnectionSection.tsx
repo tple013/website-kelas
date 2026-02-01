@@ -1,13 +1,13 @@
 export function ConnectSection() {
   return (
-    <section className="bg-white rounded-3xl p-10 md:p-16 shadow-lg border border-slate-100 text-center relative overflow-hidden">
+    <section className="bg-white dark:bg-slate-800 rounded-3xl p-10 md:p-16 shadow-lg border border-slate-100 dark:border-slate-700 text-center relative overflow-hidden">
       {/* Background Decorations */}
-      <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 rounded-full bg-blue-50 opacity-50 blur-3xl"></div>
-      <div className="absolute bottom-0 left-0 -ml-16 -mb-16 w-64 h-64 rounded-full bg-sky-50 opacity-50 blur-3xl"></div>
+      <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 rounded-full bg-blue-50 dark:bg-blue-900/30 opacity-50 blur-3xl"></div>
+      <div className="absolute bottom-0 left-0 -ml-16 -mb-16 w-64 h-64 rounded-full bg-sky-50 dark:bg-sky-900/30 opacity-50 blur-3xl"></div>
 
       <div className="relative z-10">
-        <h2 className="text-3xl font-bold text-slate-800 mb-4">Ingin Berkolaborasi?</h2>
-        <p className="text-slate-500 mb-8 max-w-2xl mx-auto">
+        <h2 className="text-3xl font-bold text-slate-800 dark:text-white mb-4">Ingin Berkolaborasi?</h2>
+        <p className="text-slate-500 dark:text-slate-400 mb-8 max-w-2xl mx-auto">
           Ikuti perjalanan kami di media sosial atau lihat kode sumber proyek kami di GitHub. Mari tumbuh bersama.
         </p>
 

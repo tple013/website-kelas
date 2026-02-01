@@ -50,7 +50,7 @@ export function ExpandableText({
               e.stopPropagation();
               setIsExpanded(true);
             }}
-            className="relative z-10 text-blue-600 hover:text-blue-800 text-xs font-medium mt-1 hover:underline focus:outline-none"
+            className="relative z-10 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-xs font-medium mt-1 hover:underline focus:outline-none"
           >
             Lihat selengkapnya
           </button>
@@ -62,7 +62,7 @@ export function ExpandableText({
         onClose={() => setIsExpanded(false)}
         title={title}
       >
-        <p className="text-slate-600 leading-relaxed whitespace-pre-wrap">
+        <p className="text-slate-600 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">
           {text}
         </p>
       </Modal>
