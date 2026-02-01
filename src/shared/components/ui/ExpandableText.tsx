@@ -37,7 +37,7 @@ export function ExpandableText({
 
   return (
     <>
-      <div>
+      <div className="relative">
         <p 
           ref={textRef}
           className={`${lineClampClass} ${className}`}
@@ -46,8 +46,11 @@ export function ExpandableText({
         </p>
         {isTruncated && (
           <button
-            onClick={() => setIsExpanded(true)}
-            className="text-blue-600 hover:text-blue-800 text-xs font-medium mt-1 hover:underline"
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsExpanded(true);
+            }}
+            className="relative z-10 text-blue-600 hover:text-blue-800 text-xs font-medium mt-1 hover:underline focus:outline-none"
           >
             Lihat selengkapnya
           </button>
