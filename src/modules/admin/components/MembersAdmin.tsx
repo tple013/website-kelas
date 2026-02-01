@@ -167,7 +167,7 @@ export function MembersAdmin() {
           <h2 className="text-lg font-semibold text-slate-900">Daftar Anggota</h2>
           <p className="text-sm text-slate-500">{members.length} anggota terdaftar</p>
         </div>
-        <Button onClick={() => setIsFormOpen(true)} icon="bi-plus-lg">
+        <Button onClick={() => setIsFormOpen(true)} icon={<i className="bi bi-plus-lg" />}>
           Tambah Anggota
         </Button>
       </div>
