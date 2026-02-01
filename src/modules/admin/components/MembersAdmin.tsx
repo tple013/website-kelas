@@ -277,9 +277,10 @@ export function MembersAdmin() {
         </form>
       </Modal>
 
-      {/* Table */}
+      {/* Table Desktop / Cards Mobile */}
       <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
-        <table className="w-full">
+        {/* Desktop Table */}
+        <table className="w-full hidden md:table">
           <thead className="bg-slate-50 border-b">
             <tr>
               <th className="text-left px-4 py-3 text-sm font-medium text-slate-600">Nama</th>
@@ -341,6 +342,54 @@ export function MembersAdmin() {
             )}
           </tbody>
         </table>
+
+        {/* Mobile Cards */}
+        <div className="md:hidden divide-y">
+          {members.map((member) => (
+            <div key={member.id} className="p-4">
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-medium">
+                    {member.name.charAt(0)}
+                  </div>
+                  <div>
+                    <div className="font-medium text-slate-900">{member.name}</div>
+                    <div className="text-sm text-slate-500">{member.role || "Anggota"}</div>
+                  </div>
+                </div>
+                <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
+                  member.is_officer 
+                    ? "bg-blue-100 text-blue-700" 
+                    : "bg-slate-100 text-slate-600"
+                }`}>
+                  {member.is_officer ? "Pengurus" : "Anggota"}
+                </span>
+              </div>
+              {member.description && (
+                <p className="text-sm text-slate-500 mt-2 line-clamp-2">{member.description}</p>
+              )}
+              <div className="flex justify-end gap-4 mt-3 pt-3 border-t">
+                <button
+                  onClick={() => handleEdit(member)}
+                  className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1"
+                >
+                  <i className="bi bi-pencil"></i> Edit
+                </button>
+                <button
+                  onClick={() => handleDelete(member.id, member.name)}
+                  className="text-sm text-red-600 hover:text-red-800 flex items-center gap-1"
+                >
+                  <i className="bi bi-trash"></i> Hapus
+                </button>
+              </div>
+            </div>
+          ))}
+          {members.length === 0 && (
+            <div className="p-8 text-center text-slate-500">
+              Belum ada anggota. Klik &ldquo;Tambah Anggota&rdquo; untuk memulai.
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
