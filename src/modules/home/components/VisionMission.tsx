@@ -58,7 +58,7 @@ export function VisionMission() {
             </p>
             <div className="grid grid-cols-2 gap-4 border-t border-blue-800 pt-8">
               <div>
-                <div className="text-3xl font-bold text-sky-400">28</div>
+                <div className="text-3xl font-bold text-sky-400">36</div>
                 <div className="text-sm text-blue-300">Anggota Aktif</div>
               </div>
               <div>
