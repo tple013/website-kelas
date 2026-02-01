@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Card, CardBody, CardFooter } from "@/shared/components/ui/Card";
 import { Badge } from "@/shared/components/ui/Badge";
+import { ExpandableText } from "@/shared/components/ui/ExpandableText";
 import type { Project } from "@/lib/types";
 
 const statusConfig = {
@@ -20,7 +21,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
     <Card className="flex flex-col h-full group overflow-hidden">
       {/* Project Image */}
       {project.image && (
-        <div className="relative w-full h-48 overflow-hidden">
+        <div className="relative w-full h-32 md:h-48 overflow-hidden">
           <Image
             src={project.image}
             alt={project.title}
@@ -32,38 +33,48 @@ export function ProjectCard({ project }: ProjectCardProps) {
         </div>
       )}
       
-      <CardBody className="flex-grow p-8">
+      <CardBody className="flex-grow p-4 md:p-8">
         {/* Title & Status */}
-        <div className="flex justify-between items-start mb-6 gap-4">
-          <h2 className="text-2xl font-bold text-slate-800 group-hover:text-blue-600 transition-colors leading-tight">
+        <div className="flex justify-between items-start mb-3 md:mb-6 gap-2">
+          <h2 className="text-lg md:text-2xl font-bold text-slate-800 group-hover:text-blue-600 transition-colors leading-tight">
             {project.title}
           </h2>
-          <Badge variant={status.variant} className="flex-shrink-0">
+          <Badge variant={status.variant} className="flex-shrink-0 text-xs">
             <i className={`bi ${status.icon} mr-1`}></i>
-            {status.label}
+            <span className="hidden sm:inline">{status.label}</span>
           </Badge>
         </div>
 
-        <p className="text-slate-600 mb-6 leading-relaxed">{project.description}</p>
+        <div className="mb-3 md:mb-6">
+          <ExpandableText 
+            text={project.description} 
+            maxLines={2} 
+            className="text-sm md:text-base text-slate-600 leading-relaxed"
+            title={project.title}
+          />
+        </div>
 
         {/* Tech Stack */}
-        <div className="mb-6">
-          <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Teknologi</h3>
-          <div className="flex flex-wrap gap-2">
-            {project.technologies.map((tech) => (
+        <div className="mb-3 md:mb-6">
+          <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Teknologi</h3>
+          <div className="flex flex-wrap gap-1 md:gap-2">
+            {project.technologies.slice(0, 4).map((tech) => (
               <span
                 key={tech}
-                className="bg-blue-50 text-blue-600 border border-blue-200 px-3 py-1 rounded-md text-xs font-medium hover:bg-blue-100 transition-colors"
+                className="bg-blue-50 text-blue-600 border border-blue-200 px-2 py-0.5 md:px-3 md:py-1 rounded-md text-xs font-medium"
               >
                 {tech}
               </span>
             ))}
+            {project.technologies.length > 4 && (
+              <span className="text-xs text-slate-400">+{project.technologies.length - 4}</span>
+            )}
           </div>
         </div>
 
-        {/* Features */}
+        {/* Features - Hidden on mobile, show on desktop */}
         {project.features.length > 0 && (
-          <div className="mb-6">
+          <div className="hidden md:block mb-6">
             <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Fitur</h3>
             <div className="flex flex-wrap gap-2">
               {project.features.map((feature) => (
@@ -78,38 +89,38 @@ export function ProjectCard({ project }: ProjectCardProps) {
           </div>
         )}
 
-        {/* Team */}
+        {/* Team - Simplified on mobile */}
         <div>
           <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Kontributor</h3>
           <div className="flex items-center -space-x-2 overflow-hidden">
-            {project.teamMembers.slice(0, 5).map((member, idx) => (
+            {project.teamMembers.slice(0, 3).map((member, idx) => (
               <div
                 key={idx}
-                className="inline-flex h-8 w-8 rounded-full ring-2 ring-white bg-slate-200 items-center justify-center text-xs text-slate-500 font-bold"
+                className="inline-flex h-6 w-6 md:h-8 md:w-8 rounded-full ring-2 ring-white bg-slate-200 items-center justify-center text-xs text-slate-500 font-bold"
                 title={member}
               >
                 {member.charAt(0)}
               </div>
             ))}
-            {project.teamMembers.length > 5 && (
-              <div className="inline-flex h-8 w-8 rounded-full ring-2 ring-white bg-slate-100 items-center justify-center text-xs text-slate-500 font-medium">
-                +{project.teamMembers.length - 5}
+            {project.teamMembers.length > 3 && (
+              <div className="inline-flex h-6 w-6 md:h-8 md:w-8 rounded-full ring-2 ring-white bg-slate-100 items-center justify-center text-xs text-slate-500 font-medium">
+                +{project.teamMembers.length - 3}
               </div>
             )}
           </div>
-          <p className="text-xs text-slate-400 mt-2">{project.teamMembers.join(", ")}</p>
+          <p className="text-xs text-slate-400 mt-1 line-clamp-1">{project.teamMembers.slice(0, 3).join(", ")}{project.teamMembers.length > 3 ? '...' : ''}</p>
         </div>
       </CardBody>
 
       {project.githubUrl && (
-        <CardFooter className="flex justify-end">
+        <CardFooter className="flex justify-end p-3 md:p-4">
           <a
             href={project.githubUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center space-x-2 text-slate-600 hover:text-blue-600 font-medium transition-colors text-sm"
+            className="inline-flex items-center space-x-2 text-slate-600 hover:text-blue-600 font-medium transition-colors text-xs md:text-sm"
           >
-            <i className="bi bi-github text-lg"></i>
+            <i className="bi bi-github text-base md:text-lg"></i>
             <span>Lihat Repository</span>
             <i className="bi bi-arrow-right"></i>
           </a>

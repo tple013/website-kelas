@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Card, CardBody, CardFooter } from "@/shared/components/ui/Card";
+import { ExpandableText } from "@/shared/components/ui/ExpandableText";
 import { getAssetPath, getAvatarFallback } from "@/lib/utils";
 import type { Member } from "@/lib/types";
 
@@ -34,7 +35,14 @@ export function MemberCard({ member }: MemberCardProps) {
         </div>
         <h3 className="text-sm font-semibold text-slate-800 line-clamp-2 min-h-[40px]">{member.name}</h3>
         {member.description && (
-          <p className="text-xs text-slate-500 mt-2 line-clamp-2">{member.description}</p>
+          <div className="mt-2">
+            <ExpandableText 
+              text={member.description} 
+              maxLines={2} 
+              className="text-xs text-slate-500"
+              title={member.name}
+            />
+          </div>
         )}
       </CardBody>
       <CardFooter className="flex justify-center space-x-3 py-2">

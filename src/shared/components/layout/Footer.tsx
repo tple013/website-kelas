@@ -90,7 +90,6 @@ export default function Footer() {
         {/* COPYRIGHT SECTION */}
         <div className="border-t border-slate-800 mt-12 pt-8 flex flex-col md:flex-row justify-center items-center text-sm text-slate-500">
           <p>© {currentYear} TPLE013. Hak cipta dilindungi.</p>
-         
         </div>
       </div>
     </footer>
