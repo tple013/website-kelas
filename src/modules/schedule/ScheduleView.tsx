@@ -37,7 +37,7 @@ export function ScheduleView() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         {/* Header */}
         <div className="text-center mb-16 space-y-4">
-          <Badge variant="info" className="uppercase tracking-wider">Akademik Semester 1</Badge>
+          <Badge variant="info" className="uppercase tracking-wider">Akademik Semester 2</Badge>
           <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900">Jadwal Perkuliahan</h1>
           <p className="text-slate-500 max-w-2xl mx-auto text-lg leading-relaxed">
             Daftar lengkap mata kuliah, waktu, dan ruang kelas untuk mahasiswa kelas TPLE013.
