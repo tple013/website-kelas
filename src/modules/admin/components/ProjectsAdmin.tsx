@@ -23,7 +23,7 @@ const initialFormData: FormData = {
   title: "",
   description: "",
   image: "",
-  status: "ongoing",
+  status: "in-progress",
   start_date: "",
   end_date: "",
   team_members: "",
@@ -128,14 +128,13 @@ export function ProjectsAdmin() {
   };
 
   const statusOptions = [
-    { value: "ongoing", label: "Sedang Berjalan" },
+    { value: "in-progress", label: "Sedang Berjalan" },
     { value: "completed", label: "Selesai" },
     { value: "planned", label: "Direncanakan" },
-    { value: "cancelled", label: "Dibatalkan" },
   ];
 
   const statusColors: Record<string, string> = {
-    ongoing: "bg-blue-100 text-blue-700",
+    "in-progress": "bg-blue-100 text-blue-700",
     completed: "bg-green-100 text-green-700",
     planned: "bg-yellow-100 text-yellow-700",
     cancelled: "bg-red-100 text-red-700",
