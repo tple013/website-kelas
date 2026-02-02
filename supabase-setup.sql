@@ -39,6 +39,8 @@ CREATE TABLE IF NOT EXISTS members (
   is_officer BOOLEAN DEFAULT false,
   instagram TEXT,
   linkedin TEXT,
+  github TEXT,
+  portfolio TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 

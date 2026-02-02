@@ -56,7 +56,17 @@ export function MemberCard({ member }: MemberCardProps) {
             <i className="bi bi-linkedin"></i>
           </a>
         )}
-        {!member.instagram && !member.linkedin && (
+        {member.github && (
+          <a href={member.github} target="_blank" rel="noopener noreferrer" className="text-slate-400 dark:text-slate-500 hover:text-gray-900 dark:hover:text-white transition-colors">
+            <i className="bi bi-github"></i>
+          </a>
+        )}
+        {member.portfolio && (
+          <a href={member.portfolio} target="_blank" rel="noopener noreferrer" className="text-slate-400 dark:text-slate-500 hover:text-emerald-600 transition-colors">
+            <i className="bi bi-globe"></i>
+          </a>
+        )}
+        {!member.instagram && !member.linkedin && !member.github && !member.portfolio && (
           <span className="text-slate-300 dark:text-slate-600 text-xs">No social links</span>
         )}
       </CardFooter>

@@ -20,6 +20,8 @@ export function MembersAdmin() {
     is_officer: false,
     instagram: "",
     linkedin: "",
+    github: "",
+    portfolio: "",
   });
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string>("");
@@ -36,6 +38,8 @@ export function MembersAdmin() {
       is_officer: false,
       instagram: "",
       linkedin: "",
+      github: "",
+      portfolio: "",
     });
     setSelectedFile(null);
     setPhotoPreview("");
@@ -55,6 +59,8 @@ export function MembersAdmin() {
       is_officer: member.is_officer,
       instagram: member.instagram || "",
       linkedin: member.linkedin || "",
+      github: member.github || "",
+      portfolio: member.portfolio || "",
     });
     setPhotoPreview(member.photo || "");
     setSelectedFile(null);
@@ -263,6 +269,21 @@ export function MembersAdmin() {
               value={formData.linkedin}
               onChange={(e) => setFormData({ ...formData, linkedin: e.target.value })}
               placeholder="https://linkedin.com/in/..."
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <Input
+              label="GitHub"
+              value={formData.github}
+              onChange={(e) => setFormData({ ...formData, github: e.target.value })}
+              placeholder="https://github.com/..."
+            />
+            <Input
+              label="Portfolio"
+              value={formData.portfolio}
+              onChange={(e) => setFormData({ ...formData, portfolio: e.target.value })}
+              placeholder="https://..."
             />
           </div>
 

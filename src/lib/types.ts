@@ -13,6 +13,8 @@ export interface DbMember {
   is_officer: boolean;
   instagram: string | null;
   linkedin: string | null;
+  github: string | null;
+  portfolio: string | null;
   created_at: string;
 }
 
@@ -52,6 +54,8 @@ export interface Member {
   isOfficer: boolean;
   instagram?: string;
   linkedin?: string;
+  github?: string;
+  portfolio?: string;
 }
 
 export interface Project {
@@ -86,6 +90,8 @@ export function mapDbToMember(db: DbMember): Member {
     isOfficer: db.is_officer,
     instagram: db.instagram || undefined,
     linkedin: db.linkedin || undefined,
+    github: db.github || undefined,
+    portfolio: db.portfolio || undefined,
   };
 }
 
