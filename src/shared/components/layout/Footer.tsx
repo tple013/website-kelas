@@ -29,12 +29,16 @@ export default function Footer() {
             <div className="flex space-x-4 pt-1">
               {/* Social Media Icons */}
               <a href="https://github.com/tple013" target="_blank" rel="noopener noreferrer" 
-                 className="bg-slate-200 dark:bg-gray-900 hover:bg-blue-600 text-slate-700 dark:text-white hover:text-white p-2 rounded-full transition-all duration-300 hover:-translate-y-1">
+                 className="bg-slate-200 dark:bg-gray-900 hover:bg-gray-900 text-slate-700 dark:text-white hover:text-white p-2 rounded-full transition-all duration-300 hover:-translate-y-1">
                 <i className="bi bi-github text-base"></i>
               </a>
               <a href="https://www.instagram.com/013promax_tics/" target="_blank" rel="noopener noreferrer" 
                  className="bg-slate-200 dark:bg-gray-900 hover:bg-pink-600 text-slate-700 dark:text-white hover:text-white p-2 rounded-full transition-all duration-300 hover:-translate-y-1">
                 <i className="bi bi-instagram text-base"></i>
+              </a>
+              <a href="https://discord.gg/2FqK8dyGAC" target="_blank" rel="noopener noreferrer" 
+                 className="bg-slate-200 dark:bg-gray-900 hover:bg-blue-700 text-slate-700 dark:text-white hover:text-white p-2 rounded-full transition-all duration-300 hover:-translate-y-1">
+                <i className="bi bi-discord text-base"></i>
               </a>
             </div>
           </div>

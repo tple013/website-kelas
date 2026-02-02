@@ -28,6 +28,14 @@ export function ConnectSection() {
             <i className="bi bi-instagram text-xl"></i>
             <span>Follow Instagram</span>
           </a>
+          <a
+            href="https://discord.gg/2FqK8dyGAC"
+            target="_blank"
+            className="flex items-center space-x-3 bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-600 hover:to-blue-800 text-white px-8 py-3 rounded-full font-medium transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1 w-full sm:w-auto justify-center"
+          >
+            <i className="bi bi-discord text-xl"></i>
+            <span>Join Our Discord</span>
+          </a>
         </div>
       </div>
     </section>
