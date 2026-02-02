@@ -39,9 +39,11 @@ export default function Header() {
             <div className="bg-blue-600 p-2 rounded-lg group-hover:bg-blue-700 transition-all duration-300">
               <i className="bi bi-code-slash text-white text-xl"></i>
             </div>
-            <Link href="/" className="text-xl font-bold text-slate-900 dark:text-white tracking-wider hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-              TPLE<span className="text-blue-500">013</span>
-            </Link>
+           <Link
+  href="/"
+  className="text-xl font-bold tracking-wider bg-gradient-to-r from-sky-500 to-blue-600 bg-clip-text text-transparent hover:font-extrabold dark:from-blue-500 dark:to-sky-300"
+ >TPLE<span className="font-extrabold">013</span>
+</Link>
           </div>
 
           {/* DESKTOP MENU */}
