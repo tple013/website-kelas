@@ -53,12 +53,11 @@ export default function Footer() {
               ))}
             </ul>
           </div>
-
         </div>
 
         {/* COPYRIGHT SECTION */}
         <div className="border-t border-slate-200 dark:border-slate-700 mt-6 pt-6 flex justify-center items-center text-sm text-slate-500">
-          <p>© {currentYear} TPLE013. Hak cipta dilindungi.</p>
+          <p> {currentYear} TPLE013. Hak cipta dilindungi.</p>
         </div>
       </div>
     </footer>

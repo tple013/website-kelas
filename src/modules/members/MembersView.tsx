@@ -43,9 +43,9 @@ export function MembersView() {
         {/* Section: Pengurus */}
         <section className="space-y-10">
           <div className="text-center">
-            <Badge variant="info" className="mb-4 uppercase tracking-wider">Struktur Organisasi</Badge>
+            <Badge variant="info" className="mb-4 uppercase tracking-wider">Struktur Organisasi Kelas</Badge>
             <h1 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4">
-              Pengurus Kelas <span className="text-blue-600">TPLE013</span>
+                <span className="bg-gradient-to-r from-sky-400 to-blue-700 bg-clip-text text-transparent">TPLE013</span>
             </h1>
             <p className="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
               Dedikasi dan kepemimpinan untuk kemajuan bersama.
