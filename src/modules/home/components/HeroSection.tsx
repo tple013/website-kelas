@@ -11,17 +11,17 @@ export function HeroSection() {
         {/* Badge */}
         <div className="inline-flex items-center px-3 py-1 rounded-full border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/50 text-blue-700 dark:text-blue-400 text-sm font-medium mb-8">
           <span className="flex h-2 w-2 rounded-full bg-blue-600 mr-2"></span>
-          Generasi Teknologi Masa Depan
+          Teknik Informatika 2026 🚀
         </div>
 
         {/* Headline */}
         <h1 className="text-5xl md:text-7xl font-bold text-slate-900 dark:text-white mb-6 tracking-tight">
-          Selamat Datang di <br className="hidden md:block" />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-sky-500">TPLE013</span>
+          Yo, Welcome to <br className="hidden md:block" />
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-sky-500">TPLE013!</span> 👋
         </h1>
 
         <p className="text-xl text-slate-600 dark:text-slate-400 max-w-3xl mx-auto mb-10 leading-relaxed">
-          Bersama membangun ekosistem digital Indonesia melalui inovasi teknologi, kolaborasi solid, dan pengembangan kompetensi yang berkelanjutan.
+          Ini dia kelas paling seru di kampus! 🔥 Mau tau siapa aja yang ada di sini? Atau penasaran project keren yang udah kita garap? Langsung cek aja!
         </p>
 
         {/* CTA Buttons */}
