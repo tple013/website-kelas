@@ -107,6 +107,7 @@ export default function Header() {
                 </Link>
                 <a href="https://github.com/tple013" className="block w-full text-center bg-blue-700 text-white font-medium py-3 rounded-lg hover:bg-blue-600 transition-colors">
                   Kunjungi GitHub
+                
                 </a>
               </div>
             </div>

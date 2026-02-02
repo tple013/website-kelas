@@ -3,14 +3,7 @@ import Link from 'next/link';
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
-  // Data untuk Link Cepat (Memudahkan jika ingin tambah menu)
-  const quickLinks = [
-    { label: "Beranda", href: "/", icon: "bi-house-door" },
-    { label: "Anggota", href: "/members", icon: "bi-people" },
-    { label: "Proyek", href: "/projects", icon: "bi-folder" },
-    { label: "Jadwal", href: "/schedule", icon: "bi-calendar-event" },
-    { label: "Tentang", href: "/about", icon: "bi-info-circle" },
-  ];
+  
 
   // Data Kontak
   const contactInfo = [
@@ -48,26 +41,6 @@ export default function Footer() {
                 <i className="bi bi-instagram text-lg"></i>
               </a>
             </div>
-          </div>
-
-          {/* KOLOM 2: LINK CEPAT */}
-          <div>
-            <h4 className="text-white font-bold text-lg mb-6 border-b border-blue-500/30 pb-2 inline-block">
-              Navigasi
-            </h4>
-            <ul className="space-y-3">
-              {quickLinks.map((link, index) => (
-                <li key={index}>
-                  <Link 
-                    href={link.href} 
-                    className="group flex items-center space-x-2 hover:text-sky-400 transition-colors duration-200"
-                  >
-                    <i className={`bi ${link.icon} text-blue-700 group-hover:text-sky-400 transition-colors`}></i>
-                    <span className="text-md text-white">{link.label}</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
           </div>
 
           {/* KOLOM 3: KONTAK */}
