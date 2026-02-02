@@ -19,8 +19,8 @@ export default function Footer() {
               <div className="bg-blue-600 rounded-lg p-2 shadow-lg shadow-blue-500/20">
                 <i className="bi bi-code-slash text-white text-xl"></i>
               </div>
-              <h3 className="text-2xl font-bold text-slate-900 dark:text-stone-300 tracking-wide">
-                TPLE<span className="text-blue-500">013</span>
+              <h3 className="text-xl font-bold tracking-wider bg-gradient-to-r from-sky-500 to-blue-600 bg-clip-text text-transparent  dark:from-blue-500 dark:to-sky-300">
+                TPLE<span className="text-blue-500 dark:text-sky-600">013</span>
               </h3>
             </div>
             <p className="text-slate-600 dark:text-slate-300 leading-relaxed max-w-md text-sm">

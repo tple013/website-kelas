@@ -61,9 +61,9 @@ export default function Header() {
             
             <div className="pl-6 border-l border-slate-300 dark:border-slate-600 flex items-center gap-3">
               <ThemeToggle />
-              <Link href="/admin" className="text-sm font-semibold text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/50 hover:bg-blue-100 dark:hover:bg-blue-900 px-4 py-2.5 rounded-full transition-all flex items-center gap-2">
+              <Link href="/admin" className="text-sm font-semibold dark:text-white text-blue-700  bg-blue-50 dark:bg-blue-700 hover:bg-blue-100 dark:hover:bg-blue-900 px-4 py-2.5 rounded-full transition-all flex items-center gap-2">
                 <i className="bi bi-shield-lock"></i>
-                Admin
+                Login
               </Link>
               <a href="https://github.com/tple013" target="_blank" className="text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 px-5 py-2.5 rounded-full transition-all shadow-lg shadow-blue-600/20">
                 GitHub
@@ -105,7 +105,7 @@ export default function Header() {
                   onClick={() => setIsMenuOpen(false)}
                 >
                   <i className="bi bi-shield-lock"></i>
-                  Admin Panel
+                  Login
                 </Link>
                 <a href="https://github.com/tple013" className="block w-full text-center bg-blue-700 text-white font-medium py-3 rounded-lg hover:bg-blue-600 transition-colors">
                   Kunjungi GitHub

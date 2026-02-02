@@ -11,7 +11,7 @@ export function HeroSection() {
         {/* Badge */}
         <div className="inline-flex items-center px-3 py-1 rounded-full border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/50 text-blue-700 dark:text-blue-400 text-sm font-medium mb-8">
           <span className="flex h-2 w-2 rounded-full bg-blue-600 mr-2"></span>
-          Teknik Informatika 2026 🚀
+          Teknik Informatika Universitas Pamulang
         </div>
 
         {/* Headline */}
@@ -21,7 +21,7 @@ export function HeroSection() {
         </h1>
 
         <p className="text-xl text-slate-600 dark:text-slate-400 max-w-3xl mx-auto mb-10 leading-relaxed">
-          Ini dia kelas paling seru di kampus! 🔥 Mau tau siapa aja yang ada di sini? Atau penasaran project keren yang udah kita garap? Langsung cek aja!
+          Ini dia kelas paling seru di kampus! Mau tau siapa aja yang ada di sini? Atau penasaran project keren yang udah kita garap? Langsung cek aja!
         </p>
 
         {/* CTA Buttons */}
